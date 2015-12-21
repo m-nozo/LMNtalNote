@@ -22,7 +22,7 @@
 	  <circle r="18"
 		  stroke="black"
 		  stroke-width="2" />
-	  <polygon fill="black" points="5,-18 -5,-23 -5,-13" />
+	  <polygon fill-opacity="1" fill="black" points="5,-18 -5,-23 -5,-13" />
 	</g>
 
 	<!-- Variable Process -->
@@ -72,14 +72,27 @@
 
       <!-- Object Pool -->
       <g id="pool" transform="translate(30,30)">
-	<circle r="4"/>
 	<g id="layer1"></g>
-	<g id="layer2">
-	  <use xlink:href="#var_proc" fill="red" x="60" y="60"/>
-	</g>
+	<g id="layer2"></g>
       </g>
 
-
+      <use id="tool_atom"
+	   xlink:href="#atom"
+	   fill-opacity="0.2"
+	   fill="red"
+	   x="30"
+	   y="30"></use>
+      <rect id="tool_memb"
+	    fill-opacity="0.2"
+	    fill="red"
+	    stroke="black"
+	    stroke-width="2"
+	    width="36"
+	    height="36"
+	    rx="8"
+	    ry="8"
+	    x="72"
+	    y="12"></use>
 
       <!-- gタグをuseタグで使うと中央寄せになる -->
       <!-- gタグの中の要素でプロパティを指定していない場合あとからuseタグのなかでjsによってプロパティを変更することができる？ -->

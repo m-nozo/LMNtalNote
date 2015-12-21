@@ -18,6 +18,17 @@ window.onload = function () {
     var latestlink = null;
     var latestmemb = null;
 
+    document.getElementById("tool_atom").addEventListener("click", function (e) {
+	mouse.mode = "atom";
+	console.log("mouse mode:" + mouse.mode);
+    }, false);
+
+    document.getElementById("tool_memb").addEventListener("click", function (e) {
+	mouse.mode = "memb";
+	console.log("mouse mode:" + mouse.mode);
+    }, false);
+
+
     // update position of mouse
     document.addEventListener("mousemove", function (e) {
 	mouse.move = true;
