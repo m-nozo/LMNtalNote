@@ -14,7 +14,7 @@ window.onload = function () {
     var grid_w = grid.getAttribute("width");
     var grid_h = grid.getAttribute("height");
 
-    mouse = {x:0, y:0, px:0, py:0, down:false, move:false, mode:"atom"};
+    mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, mode:"atom"};
     var latestlink = null;
     var latestmemb = null;
 
@@ -31,15 +31,20 @@ window.onload = function () {
 
     // update position of mouse
     document.addEventListener("mousemove", function (e) {
-	mouse.move = true;
+	mouse.moved = true;
 	mouse.px = mouse.x;
 	mouse.py = mouse.y;
 	mouse.x = e.pageX;
 	mouse.y = e.pageY;
     }, false);
 
+    document.addEventListener("mousedown", function (e) {
+	mouse.moved = false;
+	mouse.down = true;
+    }, false);
+
     document.addEventListener("mouseup", function (e) {
-	mouse.move = false;
+	mouse.moved = false;
 	mouse.down = false;
     }, false);
 
@@ -62,8 +67,6 @@ window.onload = function () {
     //====================================
     // mouse event setting
     bg.addEventListener("mousedown", function (e) {
-	mouse.move = false;
-	mouse.down = true;
 	switch (mouse.mode) {
 	case "atom": break;
 	case "memb": bg_put_memb(); break;
@@ -128,7 +131,7 @@ window.onload = function () {
 
 
     function bg_put_atom () {
-	if(!mouse.move){
+	if(!mouse.moved){
 	    var grid_pos = get_pos(grid);
 	    var guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
     	    set_pos_abs(create_new_atom(), guide_pos.x, guide_pos.y);
@@ -136,7 +139,7 @@ window.onload = function () {
     }
 
     function bg_put_memb () {
-	if(!mouse.move){
+	if(!mouse.moved){
 	    var grid_pos = get_pos(grid);
 	    var guide_pos = get_grid_mid_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
     	    set_pos_abs(create_new_memb(), guide_pos.x, guide_pos.y);
