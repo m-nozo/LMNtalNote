@@ -123,17 +123,13 @@ window.onload = function () {
     // create process object on parent_process
     function create_new_process (parent_process) {
 	if(mouse.moved) return;
-
-	var grid_pos = get_pos(grid);
-	var guide_pos;
+	var guide_pos = get_pos_rel(grid, guide);
 
 	switch (mouse.mode) {
 	case "atom" :
-	    guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
     	    set_pos_abs(create_new_atom(), guide_pos.x, guide_pos.y);
 	    break;
 	case "memb" :
-	    guide_pos = get_grid_mid_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
     	    set_pos_abs(create_new_memb(), guide_pos.x, guide_pos.y);
 	    break;
 	}
@@ -268,6 +264,14 @@ window.onload = function () {
 	return {
 	    x: Number(obj.getAttribute("x")),
 	    y: Number(obj.getAttribute("y"))
+	}
+    }
+
+    // get position relative
+    function get_pos_rel(base_obj, obj) {
+	return {
+	    x: obj.getAttribute("x")-base_obj.getAttribute("x"),
+	    y: obj.getAttribute("y")-base_obj.getAttribute("y"),
 	}
     }
 
