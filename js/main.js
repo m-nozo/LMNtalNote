@@ -215,10 +215,10 @@ window.onload = function () {
     }
 
     //====================================
-    // Variable Process
+    // Process Context
     //====================================
-    function create_new_varprocess () {
-	console.log("create var_proc.");
+    function create_new_process_context () {
+	console.log("create Process Context.");
     }
 
     //====================================

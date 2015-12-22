@@ -25,8 +25,8 @@
 	  <polygon fill-opacity="1" fill="black" points="5,-18 -5,-23 -5,-13" />
 	</g>
 
-	<!-- Variable Process -->
-	<g id="var_proc">
+	<!-- Process Context -->
+	<g id="process_context">
 	  <circle r="18"
 		  stroke="black"
 		  stroke-width="2" />
@@ -34,7 +34,7 @@
 		  fill="white"
 		  stroke="black"
 		  stroke-width="2" />
-	  <polygon fill="black" points="5,-18 -5,-23 -5,-13" />
+	  <polygon fill-opacity="1" fill="black" points="5,-18 -5,-23 -5,-13" />
 	</g>
 
 	<!-- Rule arrow -->
@@ -107,6 +107,13 @@
 	   fill-opacity="0.2"
 	   fill="red"
 	   x="150"
+	   y="30" />
+
+      <use id="tool_process_context"
+	   xlink:href="#process_context"
+	   fill-opacity="0.2"
+	   fill="red"
+	   x="210"
 	   y="30" />
 
       <!-- gタグをuseタグで使うと中央寄せになる -->
