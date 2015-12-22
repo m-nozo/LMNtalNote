@@ -14,7 +14,7 @@ window.onload = function () {
     var grid_w = grid.getAttribute("width");
     var grid_h = grid.getAttribute("height");
 
-    mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, mode:"atom"};
+    var mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, mode:"atom"};
     var latestlink = null;
     var latestmemb = null;
 
@@ -48,39 +48,36 @@ window.onload = function () {
 	mouse.down = false;
     }, false);
 
-    // // update position of 
-    // document.addEventListener("touchmove", function (e) {
-    // 	mouse.move = true;
-    // 	mouse.px = mouse.x;
-    // 	mouse.py = mouse.y;
-    // 	mouse.x = e.changedTouches[0].pageX | 0;
-    // 	mouse.y = e.changedTouches[0].pageY | 0;
-    // }, false);
 
-    // // prevent default touchmove event
-    // document.addEventListener("touchmove", function (e) {
-    // 	e.preventDefault();
-    // }, false);
+    // set guide
+    document.addEventListener("mousemove", function (e) {
+	var grid_pos = get_pos(grid);
+	var guide_pos;
+
+	switch (mouse.mode) {
+	case "atom" : // set guide pos in atom mode
+	    guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
+	    break;
+	    
+	case "memb" : // set guide pos in memb mode
+	    guide_pos = get_grid_mid_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
+	    break;
+	}
+	set_pos_rel(grid, guide, guide_pos.x, guide_pos.y);
+    }, false);
 
     //====================================
     // Background event
     //====================================
     // mouse event setting
     bg.addEventListener("mousedown", function (e) {
-	switch (mouse.mode) {
-	case "atom": break;
-	case "memb": bg_put_memb(); break;
-	}
     }, false);
 
     bg.addEventListener("mouseup", function (e) {
-	switch (mouse.mode) {
-	case "atom": bg_put_atom(); break;
-	case "memb": break;
-	}
+	create_new_process();
     }, false);
 
-    document.addEventListener("mousemove", function (e) {
+    bg.addEventListener("mousemove", function (e) {
 	if(mouse.down || latestlink!=null){
 	    var grid_pos = get_pos(grid);
 
@@ -114,73 +111,30 @@ window.onload = function () {
 	}
     }, false);
 
-    document.addEventListener("mousemove", bg_scroll, false);
-    document.addEventListener("mousemove", bg_guide, false);
+    // scroll background
+    bg.addEventListener("mousemove", function (e) {
+	if (mouse.down && mouse.mode!="memb")
+	    pan(mouse.x-mouse.px, mouse.y-mouse.py);
+    }, false);
 
-    // // touch event setting
-    // bg.addEventListener("touchstart", function (e) {
-    // 	mouse.move = false;
-    // 	mouse.down = true;
-    // 	mouse.x = e.changedTouches[0].pageX | 0;
-    // 	mouse.y = e.changedTouches[0].pageY | 0;
-    // 	mouse.px = mouse.x;
-    // 	mouse.py = mouse.y;
-    // }, false);
+    //====================================
+    // Process
+    //====================================
+    // create process object on parent_process
+    function create_new_process (parent_process) {
+	if(mouse.moved) return;
 
-    // bg.addEventListener("touchmove", bg_scroll, false);
-
-
-    function bg_put_atom () {
-	if(!mouse.moved){
-	    var grid_pos = get_pos(grid);
-	    var guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
-    	    set_pos_abs(create_new_atom(), guide_pos.x, guide_pos.y);
-	}
-    }
-
-    function bg_put_memb () {
-	if(!mouse.moved){
-	    var grid_pos = get_pos(grid);
-	    var guide_pos = get_grid_mid_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
-    	    set_pos_abs(create_new_memb(), guide_pos.x, guide_pos.y);
-	}
-    }
-
-    function bg_guide () {
 	var grid_pos = get_pos(grid);
 	var guide_pos;
 
 	switch (mouse.mode) {
-	// set atom mode guide pos
 	case "atom" :
 	    guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
-	    set_pos_rel(grid, guide, guide_pos.x, guide_pos.y);
+    	    set_pos_abs(create_new_atom(), guide_pos.x, guide_pos.y);
 	    break;
-
-	// set memb mode guide pos
 	case "memb" :
 	    guide_pos = get_grid_mid_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
-	    set_pos_rel(grid, guide, guide_pos.x, guide_pos.y);
-	    break;
-	}
-    }
-
-    function bg_scroll () {
-	if (mouse.down && mouse.mode!="memb")
-	    pan(mouse.x-mouse.px, mouse.y-mouse.py);
-    }
-
-
-    // create process object on parent_process
-    function create_process (parent_process) {
-	var guide_pos = get_pos(guide);
-
-	switch (mouse.mode) {
-	case "atom" :
-	    set_pos_abs(create_new_atom(), guide_pos.x, guide_pos.y);
-	    break;
-	case "memb" :
-	    set_pos_abs(create_new_memb(), guide_pos.x, guide_pos.y);
+    	    set_pos_abs(create_new_memb(), guide_pos.x, guide_pos.y);
 	    break;
 	}
     }
@@ -323,3 +277,30 @@ window.onload = function () {
 	set_pos_abs(obj, obj_pos.x+dx, obj_pos.y+dy);
     }
 }
+
+
+// // update position of 
+// document.addEventListener("touchmove", function (e) {
+// 	mouse.move = true;
+// 	mouse.px = mouse.x;
+// 	mouse.py = mouse.y;
+// 	mouse.x = e.changedTouches[0].pageX | 0;
+// 	mouse.y = e.changedTouches[0].pageY | 0;
+// }, false);
+
+// // prevent default touchmove event
+// document.addEventListener("touchmove", function (e) {
+// 	e.preventDefault();
+// }, false);
+
+// // touch event setting
+// bg.addEventListener("touchstart", function (e) {
+// 	mouse.move = false;
+// 	mouse.down = true;
+// 	mouse.x = e.changedTouches[0].pageX | 0;
+// 	mouse.y = e.changedTouches[0].pageY | 0;
+// 	mouse.px = mouse.x;
+// 	mouse.py = mouse.y;
+// }, false);
+
+// bg.addEventListener("touchmove", bg_scroll, false);
