@@ -37,6 +37,13 @@
 	  <polygon fill="black" points="5,-18 -5,-23 -5,-13" />
 	</g>
 
+	<!-- Rule arrow -->
+	<g id="rule_arrow">
+	  <polygon points="-18,-9 0,-9 0,-18 18,0 0,18 0,9 -18,9"
+		   stroke="black"
+		   stroke-width="2" />
+	</g>
+
 	<!-- Guide -->
 	<g id="guide_s">
 	  <circle r="8"
@@ -81,7 +88,8 @@
 	   fill-opacity="0.2"
 	   fill="red"
 	   x="30"
-	   y="30"></use>
+	   y="30" />
+
       <rect id="tool_memb"
 	    fill-opacity="0.2"
 	    fill="red"
@@ -92,7 +100,14 @@
 	    rx="8"
 	    ry="8"
 	    x="72"
-	    y="12"></use>
+	    y="12" />
+
+      <use id="tool_rule"
+	   xlink:href="#rule_arrow"
+	   fill-opacity="0.2"
+	   fill="red"
+	   x="150"
+	   y="30" />
 
       <!-- gタグをuseタグで使うと中央寄せになる -->
       <!-- gタグの中の要素でプロパティを指定していない場合あとからuseタグのなかでjsによってプロパティを変更することができる？ -->
