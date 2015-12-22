@@ -236,11 +236,11 @@ window.onload = function () {
     	latestmemb.setAttribute("ry", "14");
     	latestmemb.setAttribute("width", "60");
     	latestmemb.setAttribute("height", "60");
-    	latestmemb.setAttribute("fill", "red");
+    	latestmemb.setAttribute("fill", "blue");
     	latestmemb.setAttribute("fill-opacity", "0.1");
     	latestmemb.setAttribute("stroke", "black");
     	latestmemb.setAttribute("stroke-width", "2");
-	latestmemb.addEventListener("mousedown", create_new_atom_on_membrane, false);
+	latestmemb.addEventListener("mouseup", create_new_atom_on_membrane, false);
 	layer1.appendChild(latestmemb);
 
 	console.log("create membrane.", latestmemb);
