@@ -139,7 +139,7 @@ window.onload = function () {
 	if(!mouse.move){
 	    var grid_pos = get_pos(grid);
 	    var guide_pos = get_grid_mid_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
-    	    set_pos_abs(create_new_membrane(), guide_pos.x, guide_pos.y);
+    	    set_pos_abs(create_new_memb(), guide_pos.x, guide_pos.y);
 	}
     }
 
@@ -167,6 +167,21 @@ window.onload = function () {
 	    pan(mouse.x-mouse.px, mouse.y-mouse.py);
     }
 
+
+    // create process object on parent_process
+    function create_process (parent_process) {
+	var guide_pos = get_pos(guide);
+
+	switch (mouse.mode) {
+	case "atom" :
+	    set_pos_abs(create_new_atom(), guide_pos.x, guide_pos.y);
+	    break;
+	case "memb" :
+	    set_pos_abs(create_new_memb(), guide_pos.x, guide_pos.y);
+	    break;
+	}
+    }
+
     //====================================
     // Atom
     //====================================
@@ -174,14 +189,6 @@ window.onload = function () {
 	var newAtom = document.createElementNS(svgns, "use");
 	newAtom.setAttributeNS(xlinkns, "href", "#atom");
 	newAtom.setAttribute("fill", "white");
-	// // atom circle
-	// var cir = document.createElementNS(svgns, "circle");
-	// cir.setAttribute("r", "20");
-	// cir.setAttribute("fill", "white");
-	// cir.setAttribute("stroke", "black");
-	// cir.setAttribute("stroke-width", "2");
-	// newAtom.appendChild(cir);
-
 	newAtom.addEventListener("mousedown", mousedown_on_atom, false);
 	newAtom.addEventListener("mouseup", mouseup_on_atom, false);
     	layer2.appendChild(newAtom);
@@ -230,28 +237,21 @@ window.onload = function () {
     //====================================
     // Membrane
     //====================================
-    function create_new_membrane () {
-	latestmemb = document.createElementNS(svgns, "rect");
-    	latestmemb.setAttribute("rx", "14");
-    	latestmemb.setAttribute("ry", "14");
-    	latestmemb.setAttribute("width", "60");
-    	latestmemb.setAttribute("height", "60");
-    	latestmemb.setAttribute("fill", "blue");
-    	latestmemb.setAttribute("fill-opacity", "0.1");
-    	latestmemb.setAttribute("stroke", "black");
-    	latestmemb.setAttribute("stroke-width", "2");
-	latestmemb.addEventListener("mouseup", create_new_atom_on_membrane, false);
-	layer1.appendChild(latestmemb);
+    function create_new_memb () {
+	var newMemb = document.createElementNS(svgns, "rect");
+    	newMemb.setAttribute("rx", "14");
+    	newMemb.setAttribute("ry", "14");
+    	newMemb.setAttribute("width", "60");
+    	newMemb.setAttribute("height", "60");
+    	newMemb.setAttribute("fill", "blue");
+    	newMemb.setAttribute("fill-opacity", "0.1");
+    	newMemb.setAttribute("stroke", "black");
+    	newMemb.setAttribute("stroke-width", "2");
+	layer1.appendChild(newMemb);
 
-	console.log("create membrane.", latestmemb);
+	console.log("create membrane.", newMemb);
 
-	return latestmemb;
-    }
-
-    function create_new_atom_on_membrane () {
-	var grid_pos = get_pos(grid);
-	var guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
-	set_pos_abs(create_new_atom(), guide_pos.x, guide_pos.y);
+	return nweMemb;
     }
 
     //====================================
