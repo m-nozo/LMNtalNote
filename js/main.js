@@ -254,7 +254,7 @@ window.onload = function () {
 
 	console.log("create membrane.", newMemb);
 
-	return nweMemb;
+	return newMemb;
     }
 
     //====================================
