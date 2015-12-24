@@ -14,7 +14,7 @@ window.onload = function () {
     var grid_w = grid.getAttribute("width");
     var grid_h = grid.getAttribute("height");
 
-    var mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, mode:"atom"};
+    var mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, scroll:false, mode:"atom"};
     var latestlink = null;
     var latestmemb = null;
 
@@ -46,6 +46,7 @@ window.onload = function () {
     document.addEventListener("mouseup", function (e) {
 	mouse.moved = false;
 	mouse.down = false;
+	mouse.scroll = false;
     }, false);
 
 
@@ -57,13 +58,19 @@ window.onload = function () {
 	switch (mouse.mode) {
 	case "atom" : // set guide pos in atom mode
 	    guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
+	    set_pos_rel(grid, guide, guide_pos.x, guide_pos.y);
 	    break;
 	    
 	case "memb" : // set guide pos in memb mode
 	    guide_pos = get_grid_mid_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
+	    set_pos_rel(grid, guide, guide_pos.x, guide_pos.y);
 	    break;
 	}
-	set_pos_rel(grid, guide, guide_pos.x, guide_pos.y);
+    }, false);
+
+    // scroll background
+    document.addEventListener("mousemove", function (e) {
+	if (mouse.scroll) pan(mouse.x-mouse.px, mouse.y-mouse.py);
     }, false);
 
     //====================================
@@ -71,10 +78,10 @@ window.onload = function () {
     //====================================
     // mouse event setting
     bg.addEventListener("mousedown", function (e) {
+	mouse.scroll = true;
     }, false);
 
     bg.addEventListener("mouseup", function (e) {
-	create_new_process();
     }, false);
 
     bg.addEventListener("mousemove", function (e) {
@@ -109,12 +116,6 @@ window.onload = function () {
 		break;
 	    }
 	}
-    }, false);
-
-    // scroll background
-    bg.addEventListener("mousemove", function (e) {
-	if (mouse.down && mouse.mode!="memb")
-	    pan(mouse.x-mouse.px, mouse.y-mouse.py);
     }, false);
 
     //====================================
