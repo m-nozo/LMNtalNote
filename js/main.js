@@ -35,6 +35,11 @@ window.onload = function () {
 	console.log("mouse mode:" + mouse.mode);
     }, false);
 
+    tool_process_context.addEventListener("click", function (e) {
+	mouse.mode = "process_context";
+	console.log("mouse mode:" + mouse.mode);
+    }, false);
+
     //====================================
     // Document event
     //====================================
@@ -66,6 +71,7 @@ window.onload = function () {
 	var guide_pos;
 
 	switch (mouse.mode) {
+	case "process_context" :
 	case "atom" : // set guide pos in atom mode
 	    guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
 	    set_pos_rel(grid, guide, guide_pos.x, guide_pos.y);
@@ -151,6 +157,9 @@ window.onload = function () {
 	switch (mouse.mode) {
 	case "atom" :
     	    set_pos_abs(create_new_atom(), guide_pos.x, guide_pos.y);
+	    break;
+	case "process_context" :
+    	    set_pos_abs(create_new_process_context(), guide_pos.x, guide_pos.y);
 	    break;
 	}
     }
