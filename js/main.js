@@ -49,6 +49,10 @@ window.onload = function () {
     //====================================
     // Document event
     //====================================
+    document.addEventListener("contextmenu", function (e) {
+	e.preventDefault();
+    }, false);
+
     document.addEventListener("mousedown", function (e) {
 	mouse.moved = false;
 	mouse.down = true;
@@ -67,6 +71,8 @@ window.onload = function () {
 	    set_pos_abs(create_new_free_link(), guide_pos.x, guide_pos.y);
 	    latestlink = null;
 	}
+
+	latestatom = null;
     }, false);
 
     document.addEventListener("mousemove", function (e) {
@@ -208,18 +214,23 @@ window.onload = function () {
 	console.log("create atom.");
 	console.dir(newAtom);
 
-	latestatom = null;
-	latestatom = newAtom;
 	return newAtom;
     }
 
     function mousedown_on_atom (e) {
-	var atom_pos = get_pos(this);
-    	latestlink = create_new_link();
-	latestlink.setAttribute("x1", atom_pos.x);
-	latestlink.setAttribute("y1", atom_pos.y);
-	latestlink.setAttribute("x2", atom_pos.x);
-	latestlink.setAttribute("y2", atom_pos.y);
+	switch (e.button) {
+	case 0: // left mouse button
+	    var atom_pos = get_pos(this);
+    	    latestlink = create_new_link();
+	    latestlink.setAttribute("x1", atom_pos.x);
+	    latestlink.setAttribute("y1", atom_pos.y);
+	    latestlink.setAttribute("x2", atom_pos.x);
+	    latestlink.setAttribute("y2", atom_pos.y);
+	    break;
+	case 2: // right mouse button
+	    latestatom = this;
+	    break;
+	}
     }
 
     function mouseup_on_atom (e) {
