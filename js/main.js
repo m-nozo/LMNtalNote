@@ -14,30 +14,29 @@ window.onload = function () {
     var grid_w = grid.getAttribute("width");
     var grid_h = grid.getAttribute("height");
 
+    var tool_atom = svg.children.tool_atom;
+    var tool_memb = svg.children.tool_memb;
+    var tool_rule = svg.children.tool_rule;
+    var tool_process_context = svg.children.tool_process_context;
+
     var mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, scroll:false, mode:"atom"};
     var latestlink = null;
     var latestmemb = null;
 
     // select mouse mode
-    document.getElementById("tool_atom").addEventListener("click", function (e) {
+    tool_atom.addEventListener("click", function (e) {
 	mouse.mode = "atom";
 	console.log("mouse mode:" + mouse.mode);
     }, false);
 
-    document.getElementById("tool_memb").addEventListener("click", function (e) {
+    tool_memb.addEventListener("click", function (e) {
 	mouse.mode = "memb";
 	console.log("mouse mode:" + mouse.mode);
     }, false);
 
-    // update position of mouse
-    document.addEventListener("mousemove", function (e) {
-	mouse.moved = true;
-	mouse.px = mouse.x;
-	mouse.py = mouse.y;
-	mouse.x = e.pageX;
-	mouse.y = e.pageY;
-    }, false);
-
+    //====================================
+    // Document event
+    //====================================
     document.addEventListener("mousedown", function (e) {
 	mouse.moved = false;
 	mouse.down = true;
@@ -49,6 +48,13 @@ window.onload = function () {
 	mouse.scroll = false;
     }, false);
 
+    document.addEventListener("mousemove", function (e) {
+	mouse.moved = true;
+	mouse.px = mouse.x;
+	mouse.py = mouse.y;
+	mouse.x = e.pageX;
+	mouse.y = e.pageY;
+    }, false);
 
     // set guide
     document.addEventListener("mousemove", function (e) {
@@ -85,37 +91,37 @@ window.onload = function () {
     }, false);
 
     bg.addEventListener("mousemove", function (e) {
-	if(mouse.down || latestlink!=null){
-	    var grid_pos = get_pos(grid);
+	// if(mouse.down || latestlink!=null){
+	//     var grid_pos = get_pos(grid);
 
-	    // newLink animation for mousedrag
-	    switch (mouse.mode) {
-	    case "atom":
-		var guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
-		if(latestlink!=null){
-		    latestlink.setAttribute("x2", guide_pos.x);
-		    latestlink.setAttribute("y2", guide_pos.y);
-		}
-		break;
+	//     // newLink animation for mousedrag
+	//     switch (mouse.mode) {
+	//     case "atom":
+	// 	var guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
+	// 	if(latestlink!=null){
+	// 	    latestlink.setAttribute("x2", guide_pos.x);
+	// 	    latestlink.setAttribute("y2", guide_pos.y);
+	// 	}
+	// 	break;
 
-	    // newMemb animation for mousedrag
-	    case "memb":
-		var guide_pos = get_grid_mid_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
-		var memb_pos = get_pos(latestmemb);
+	//     // newMemb animation for mousedrag
+	//     case "memb":
+	// 	var guide_pos = get_grid_mid_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
+	// 	var memb_pos = get_pos(latestmemb);
 
-		if (guide_pos.x >= memb_pos.x) {
-		    latestmemb.setAttribute("width", guide_pos.x-memb_pos.x);
-		} else {
-		}
+	// 	if (guide_pos.x >= memb_pos.x) {
+	// 	    latestmemb.setAttribute("width", guide_pos.x-memb_pos.x);
+	// 	} else {
+	// 	}
 
-		if (guide_pos.y >= memb_pos.y) {
-		    latestmemb.setAttribute("height", guide_pos.y-memb_pos.y);
-		} else {
-		}
+	// 	if (guide_pos.y >= memb_pos.y) {
+	// 	    latestmemb.setAttribute("height", guide_pos.y-memb_pos.y);
+	// 	} else {
+	// 	}
 
-		break;
-	    }
-	}
+	// 	break;
+	//     }
+	// }
     }, false);
 
     //====================================
@@ -201,11 +207,19 @@ window.onload = function () {
     	newMemb.setAttribute("fill-opacity", "0.1");
     	newMemb.setAttribute("stroke", "black");
     	newMemb.setAttribute("stroke-width", "2");
+	newMemb.addEventListener("mousedown", mousedown_on_memb, false);
+	newMemb.addEventListener("mouseup", mouseup_on_memb, false);
 	layer1.appendChild(newMemb);
 
 	console.log("create membrane.", newMemb);
 
 	return newMemb;
+    }
+
+    function mousedown_on_memb (e) {
+    }
+
+    function mouseup_on_memb (e) {
     }
 
     //====================================
