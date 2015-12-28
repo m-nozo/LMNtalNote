@@ -55,6 +55,12 @@ window.onload = function () {
 
 	latestmemb = null;
 	latestmemb_pos = null;
+
+	if (latestlink != null) {
+	    var guide_pos = get_pos_rel(grid, guide);
+	    set_pos_abs(create_new_free_link(), guide_pos.x, guide_pos.y);
+	    latestlink = null;
+	}
     }, false);
 
     document.addEventListener("mousemove", function (e) {
@@ -190,9 +196,6 @@ window.onload = function () {
     }
 
     function mouseup_on_atom (e) {
-	var atom_pos = get_pos(this);
-	latestlink.setAttribute("x2", atom_pos.x);
-	latestlink.setAttribute("y2", atom_pos.y);
 	latestlink = null;
     }
 
@@ -268,6 +271,19 @@ window.onload = function () {
 	console.log("create Process Context.", newProcessContext);
 
 	return newProcessContext;
+    }
+
+    //====================================
+    // Free Link
+    //====================================
+    function create_new_free_link () {
+	var newFreeLink = document.createElementNS(svgns, "use");
+	newFreeLink.setAttributeNS(xlinkns, "href", "#free_link");
+	layer1.appendChild(newFreeLink);
+
+	console.log("create free link.");
+
+	return newFreeLink;
     }
 
     //====================================
