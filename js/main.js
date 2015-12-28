@@ -229,7 +229,16 @@ window.onload = function () {
     // Process Context
     //====================================
     function create_new_process_context () {
-	console.log("create Process Context.");
+	var newProcessContext = document.createElementNS(svgns, "use");
+	newProcessContext.setAttributeNS(xlinkns, "href", "#process_context");
+	newProcessContext.setAttribute("fill", "white");
+	newProcessContext.addEventListener("mousedown", mousedown_on_atom, false);
+	newProcessContext.addEventListener("mouseup", mouseup_on_atom, false);
+    	layer2.appendChild(newProcessContext);
+
+	console.log("create Process Context.", newProcessContext);
+
+	return newProcessContext;
     }
 
     //====================================
