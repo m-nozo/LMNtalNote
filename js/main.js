@@ -23,6 +23,7 @@ window.onload = function () {
     var latestlink = null;
     var latestmemb = null;
     var latestmemb_pos = {x:0, y:0};
+    var latestatom = create_new_atom();
 
     // select mouse mode
     tool_atom.addEventListener("click", function (e) {
@@ -125,6 +126,14 @@ window.onload = function () {
 		latestmemb.setAttribute("height", latestmemb_pos.y-guide_pos.y);
 	    }
 	}
+	if (latestatom != null) {
+	    var latestatom_pos = get_pos_rel(latestatom, grid);
+	    latestatom.setAttribute("transform",
+				    `rotate(${-Math.atan2(
+					latestatom_pos.x-mouse.x,
+					latestatom_pos.y-mouse.y
+				    ) / Math.PI*180})`);
+	}
     }, false);
 
     //====================================
@@ -190,7 +199,8 @@ window.onload = function () {
 	newAtom.addEventListener("mouseup", mouseup_on_atom, false);
     	layer2.appendChild(newAtom);
 
-	console.log("create atom.", newAtom);
+	console.log("create atom.");
+	console.dir(newAtom);
 
 	return newAtom;
     }
