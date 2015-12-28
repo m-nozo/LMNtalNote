@@ -22,6 +22,7 @@ window.onload = function () {
     var mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, scroll:false, mode:"atom"};
     var latestlink = create_new_link();
     var latestmemb = create_new_memb();
+    var latestmemb_pos = {x:0, y:0};
 
     // select mouse mode
     tool_atom.addEventListener("click", function (e) {
@@ -89,13 +90,19 @@ window.onload = function () {
 	}
 
 	if (latestmemb != null) {
-	    var memb_pos = get_pos(latestmemb);
+	    if (guide_pos.x > latestmemb_pos.x) {
+		latestmemb.setAttribute("width", guide_pos.x-latestmemb_pos.x);
+	    } else {
+ 		latestmemb.setAttribute("x", guide_pos.x);
+		latestmemb.setAttribute("width", latestmemb_pos.x-guide_pos.x);
+	    }
 
-	    if (guide_pos.x > memb_pos.x)
-		latestmemb.setAttribute("width", guide_pos.x-memb_pos.x);
-
-	    if (guide_pos.y > memb_pos.y)
-		latestmemb.setAttribute("height", guide_pos.y-memb_pos.y);
+	    if (guide_pos.y > latestmemb_pos.y) {
+		latestmemb.setAttribute("height", guide_pos.y-latestmemb_pos.y);
+	    } else {
+ 		latestmemb.setAttribute("y", guide_pos.y);
+		latestmemb.setAttribute("height", latestmemb_pos.y-guide_pos.y);
+	    }
 	}
     }, false);
 
