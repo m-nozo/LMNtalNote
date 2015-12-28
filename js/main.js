@@ -23,7 +23,7 @@ window.onload = function () {
     var latestlink = null;
     var latestmemb = null;
     var latestmemb_pos = {x:0, y:0};
-    var latestatom = create_new_atom();
+    var latestatom = null;
 
     // select mouse mode
     tool_atom.addEventListener("click", function (e) {
@@ -127,12 +127,18 @@ window.onload = function () {
 	    }
 	}
 	if (latestatom != null) {
-	    var latestatom_pos = get_pos_rel(latestatom, grid);
+	    var latestatom_pos_abs = get_pos(latestatom);
+	    var grid_pos = get_pos(grid);
+	    var angle = -Math.atan2(
+		(latestatom_pos_abs.x+grid_pos.x)-mouse.x,
+		(latestatom_pos_abs.y+grid_pos.y)-mouse.y
+	    ) / Math.PI*180;
 	    latestatom.setAttribute("transform",
-				    `rotate(${-Math.atan2(
-					latestatom_pos.x-mouse.x,
-					latestatom_pos.y-mouse.y
-				    ) / Math.PI*180})`);
+				    `rotate(
+					${angle},
+					${latestatom_pos_abs.x},
+					${latestatom_pos_abs.y}
+				    )`);
 	}
     }, false);
 
@@ -202,6 +208,8 @@ window.onload = function () {
 	console.log("create atom.");
 	console.dir(newAtom);
 
+	latestatom = null;
+	latestatom = newAtom;
 	return newAtom;
     }
 
