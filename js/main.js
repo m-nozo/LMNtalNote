@@ -35,6 +35,11 @@ window.onload = function () {
 	console.log("mouse mode:" + mouse.mode);
     }, false);
 
+    tool_rule.addEventListener("click", function (e) {
+	mouse.mode = "rule";
+	console.log("mouse mode:" + mouse.mode);
+    }, false);
+
     tool_process_context.addEventListener("click", function (e) {
 	mouse.mode = "process_context";
 	console.log("mouse mode:" + mouse.mode);
@@ -78,6 +83,7 @@ window.onload = function () {
 
 	switch (mouse.mode) {
 	case "process_context" :
+	case "rule" :
 	case "atom" : // set guide pos in atom mode
 	    guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
 	    set_pos_rel(grid, guide, guide_pos.x, guide_pos.y);
@@ -167,6 +173,9 @@ window.onload = function () {
 	case "process_context" :
     	    set_pos_abs(create_new_process_context(), guide_pos.x, guide_pos.y);
 	    break;
+	case "rule" :
+    	    set_pos_abs(create_new_rule(), guide_pos.x, guide_pos.y);
+	    break;
 	}
     }
 
@@ -254,7 +263,14 @@ window.onload = function () {
     // Rule
     //====================================
     function create_new_rule () {
+	var newRule = document.createElementNS(svgns, "use");
+	newRule.setAttributeNS(xlinkns, "href", "#rule_arrow");
+	newRule.setAttribute("fill", "white");
+    	layer2.appendChild(newRule);
+
 	console.log("create rule.");
+
+	return newRule;
     }
 
     //====================================
