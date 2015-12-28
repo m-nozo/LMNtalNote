@@ -20,8 +20,8 @@ window.onload = function () {
     var tool_process_context = svg.children.tool_process_context;
 
     var mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, scroll:false, mode:"atom"};
-    var latestlink = null;
-    var latestmemb = null;
+    var latestlink = create_new_link();
+    var latestmemb = create_new_memb();
 
     // select mouse mode
     tool_atom.addEventListener("click", function (e) {
@@ -79,6 +79,26 @@ window.onload = function () {
 	if (mouse.scroll) pan(mouse.x-mouse.px, mouse.y-mouse.py);
     }, false);
 
+    // mouse drag animation
+    document.addEventListener("mousemove", function (e) {
+	var guide_pos = get_pos_rel(grid, guide);
+
+	if (latestlink != null) {
+	    latestlink.setAttribute("x2", guide_pos.x);
+	    latestlink.setAttribute("y2", guide_pos.y);
+	}
+
+	if (latestmemb != null) {
+	    var memb_pos = get_pos(latestmemb);
+
+	    if (guide_pos.x > memb_pos.x)
+		latestmemb.setAttribute("width", guide_pos.x-memb_pos.x);
+
+	    if (guide_pos.y > memb_pos.y)
+		latestmemb.setAttribute("height", guide_pos.y-memb_pos.y);
+	}
+    }, false);
+
     //====================================
     // Background event
     //====================================
@@ -91,37 +111,6 @@ window.onload = function () {
     }, false);
 
     bg.addEventListener("mousemove", function (e) {
-	// if(mouse.down || latestlink!=null){
-	//     var grid_pos = get_pos(grid);
-
-	//     // newLink animation for mousedrag
-	//     switch (mouse.mode) {
-	//     case "atom":
-	// 	var guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
-	// 	if(latestlink!=null){
-	// 	    latestlink.setAttribute("x2", guide_pos.x);
-	// 	    latestlink.setAttribute("y2", guide_pos.y);
-	// 	}
-	// 	break;
-
-	//     // newMemb animation for mousedrag
-	//     case "memb":
-	// 	var guide_pos = get_grid_mid_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
-	// 	var memb_pos = get_pos(latestmemb);
-
-	// 	if (guide_pos.x >= memb_pos.x) {
-	// 	    latestmemb.setAttribute("width", guide_pos.x-memb_pos.x);
-	// 	} else {
-	// 	}
-
-	// 	if (guide_pos.y >= memb_pos.y) {
-	// 	    latestmemb.setAttribute("height", guide_pos.y-memb_pos.y);
-	// 	} else {
-	// 	}
-
-	// 	break;
-	//     }
-	// }
     }, false);
 
     //====================================
