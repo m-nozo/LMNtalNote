@@ -20,8 +20,8 @@ window.onload = function () {
     var tool_process_context = svg.children.tool_process_context;
 
     var mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, scroll:false, mode:"atom"};
-    var latestlink = create_new_link();
-    var latestmemb = create_new_memb();
+    var latestlink = null;
+    var latestmemb = null;
     var latestmemb_pos = {x:0, y:0};
 
     // select mouse mode
@@ -47,6 +47,9 @@ window.onload = function () {
 	mouse.moved = false;
 	mouse.down = false;
 	mouse.scroll = false;
+
+	latestmemb = null;
+	latestmemb_pos = null;
     }, false);
 
     document.addEventListener("mousemove", function (e) {
@@ -112,9 +115,11 @@ window.onload = function () {
     // mouse event setting
     bg.addEventListener("mousedown", function (e) {
 	mouse.scroll = true;
+	mousedown_on_process();
     }, false);
 
     bg.addEventListener("mouseup", function (e) {
+	mouseup_on_process();
     }, false);
 
     bg.addEventListener("mousemove", function (e) {
@@ -124,16 +129,28 @@ window.onload = function () {
     // Process
     //====================================
     // create process object on parent_process
-    function create_new_process (parent_process) {
+    function mousedown_on_process (parent_process) {
+	var guide_pos = get_pos_rel(grid, guide);
+
+	switch (mouse.mode) {
+	case "memb" :
+	    mouse.scroll = false;
+    	    set_pos_abs(create_new_memb(), guide_pos.x, guide_pos.y);
+	    latestmemb_pos = {
+		x : guide_pos.x,
+		y : guide_pos.y
+	    };
+	    break;
+	}
+    }
+
+    function mouseup_on_process (parent_process) {
 	if(mouse.moved) return;
 	var guide_pos = get_pos_rel(grid, guide);
 
 	switch (mouse.mode) {
 	case "atom" :
     	    set_pos_abs(create_new_atom(), guide_pos.x, guide_pos.y);
-	    break;
-	case "memb" :
-    	    set_pos_abs(create_new_memb(), guide_pos.x, guide_pos.y);
 	    break;
 	}
     }
@@ -176,7 +193,7 @@ window.onload = function () {
     function create_new_link () {
 	var newLink = document.createElementNS(svgns, "line");
     	newLink.setAttribute("stroke", "black");
-    	newLink.setAttribute("stroke-width", "2");
+    	newLink.setAttribute("stroke-width", "3");
     	newLink.addEventListener("click", remove_link, false);
 	layer1.appendChild(newLink);
 
@@ -209,13 +226,16 @@ window.onload = function () {
 
 	console.log("create membrane.", newMemb);
 
+	latestmemb = newMemb;
 	return newMemb;
     }
 
     function mousedown_on_memb (e) {
+	mousedown_on_process();
     }
 
     function mouseup_on_memb (e) {
+	mouseup_on_process();
     }
 
     //====================================
