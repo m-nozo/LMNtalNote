@@ -231,7 +231,7 @@ window.onload = function () {
     	newMemb.setAttribute("fill", "blue");
     	newMemb.setAttribute("fill-opacity", "0.1");
     	newMemb.setAttribute("stroke", "black");
-    	newMemb.setAttribute("stroke-width", "2");
+    	newMemb.setAttribute("stroke-width", "3");
 	newMemb.addEventListener("mousedown", mousedown_on_memb, false);
 	newMemb.addEventListener("mouseup", mouseup_on_memb, false);
 	layer1.appendChild(newMemb);
