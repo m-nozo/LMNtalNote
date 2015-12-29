@@ -9,6 +9,8 @@ window.onload = function () {
     var pool = svg.children.pool;
     var layer1 = pool.children.layer1;
     var layer2 = pool.children.layer2;
+    var layer3 = pool.children.layer3;
+    var layer4 = pool.children.layer4;
 
     var grid = svg.children.grid;
     var grid_w = grid.getAttribute("width");
@@ -209,7 +211,7 @@ window.onload = function () {
 	newAtom.setAttribute("fill", "white");
 	newAtom.addEventListener("mousedown", mousedown_on_atom, false);
 	newAtom.addEventListener("mouseup", mouseup_on_atom, false);
-    	layer2.appendChild(newAtom);
+    	layer4.appendChild(newAtom);
 
 	console.log("create atom.");
 	console.dir(newAtom);
@@ -245,7 +247,7 @@ window.onload = function () {
     	newLink.setAttribute("stroke", "black");
     	newLink.setAttribute("stroke-width", "3");
     	newLink.addEventListener("click", remove_link, false);
-	layer1.appendChild(newLink);
+	layer2.appendChild(newLink);
 
 	console.log("create link.", newLink);
 
@@ -295,7 +297,7 @@ window.onload = function () {
 	var newRule = document.createElementNS(svgns, "use");
 	newRule.setAttributeNS(xlinkns, "href", "#rule_arrow");
 	newRule.setAttribute("fill", "white");
-    	layer2.appendChild(newRule);
+    	layer4.appendChild(newRule);
 
 	console.log("create rule.");
 
@@ -311,7 +313,7 @@ window.onload = function () {
 	newProcessContext.setAttribute("fill", "white");
 	newProcessContext.addEventListener("mousedown", mousedown_on_atom, false);
 	newProcessContext.addEventListener("mouseup", mouseup_on_atom, false);
-    	layer2.appendChild(newProcessContext);
+    	layer4.appendChild(newProcessContext);
 
 	console.log("create Process Context.", newProcessContext);
 
@@ -324,7 +326,7 @@ window.onload = function () {
     function create_new_free_link () {
 	var newFreeLink = document.createElementNS(svgns, "use");
 	newFreeLink.setAttributeNS(xlinkns, "href", "#free_link");
-	layer1.appendChild(newFreeLink);
+	layer4.appendChild(newFreeLink);
 
 	console.log("create free link.");
 
