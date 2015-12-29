@@ -27,6 +27,8 @@ window.onload = function () {
     var latestmemb_pos = {x:0, y:0};
     var latestatom = null;
 
+    var text_margin = 22;
+
     // select mouse mode
     tool_atom.addEventListener("click", function (e) {
 	mouse.mode = "atom";
@@ -192,9 +194,11 @@ window.onload = function () {
 	switch (mouse.mode) {
 	case "atom" :
     	    set_pos_abs(create_new_atom(), guide_pos.x, guide_pos.y);
+    	    set_pos_abs(create_new_text(), guide_pos.x, guide_pos.y-text_margin);
 	    break;
 	case "process_context" :
     	    set_pos_abs(create_new_process_context(), guide_pos.x, guide_pos.y);
+    	    set_pos_abs(create_new_text(), guide_pos.x, guide_pos.y-text_margin);
 	    break;
 	case "rule" :
     	    set_pos_abs(create_new_rule(), guide_pos.x, guide_pos.y);
@@ -237,6 +241,23 @@ window.onload = function () {
 
     function mouseup_on_atom (e) {
 	latestlink = null;
+    }
+
+    //====================================
+    // Text
+    //====================================
+    function create_new_text () {
+	var newText = document.createElementNS(svgns, "text");
+	newText.setAttribute("text-anchor", "middle");
+	newText.setAttribute("fill", "red");
+	newText.setAttribute("font-size", "22");
+	newText.setAttribute("class", "unselectable");
+	newText.textContent = "hoge";
+	layer3.appendChild(newText);
+
+	console.log("create text.", newText);
+
+	return newText;
     }
 
     //====================================
