@@ -29,6 +29,8 @@ window.onload = function () {
 
     var text_margin = 22;
 
+    process_root = new Process();
+
     // select mouse mode
     tool_atom.addEventListener("click", function (e) {
 	mouse.mode = "atom";
@@ -219,6 +221,9 @@ window.onload = function () {
 
 	console.log("create atom.");
 	console.dir(newAtom);
+
+	newAtom.lmntal_process = new Atom("hoge");
+	process_root.push(newAtom.lmntal_process);
 
 	return newAtom;
     }
