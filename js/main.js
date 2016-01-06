@@ -163,11 +163,11 @@ window.onload = function () {
     // mouse event setting
     bg.addEventListener("mousedown", function (e) {
 	mouse.scroll = true;
-	mousedown_on_process();
+	mousedown_on_process(process_root);
     }, false);
 
     bg.addEventListener("mouseup", function (e) {
-	mouseup_on_process();
+	mouseup_on_process(process_root);
     }, false);
 
     bg.addEventListener("mousemove", function (e) {
@@ -183,7 +183,7 @@ window.onload = function () {
 	switch (mouse.mode) {
 	case "memb" :
 	    mouse.scroll = false;
-    	    set_pos_abs(create_new_memb(), guide_pos.x, guide_pos.y);
+    	    set_pos_abs(create_new_memb(parent_process), guide_pos.x, guide_pos.y);
 	    latestmemb_pos = {
 		x : guide_pos.x,
 		y : guide_pos.y
@@ -198,10 +198,10 @@ window.onload = function () {
 
 	switch (mouse.mode) {
 	case "atom" :
-	    create_new_atom(guide_pos.x, guide_pos.y);
+	    create_new_atom(parent_process, guide_pos.x, guide_pos.y);
 	    break;
 	case "process_context" :
-	    create_new_process_context(guide_pos.x, guide_pos.y);
+	    create_new_process_context(parent_process, guide_pos.x, guide_pos.y);
 	    break;
 	case "rule" :
     	    set_pos_abs(create_new_rule(), guide_pos.x, guide_pos.y);
@@ -212,7 +212,7 @@ window.onload = function () {
     //====================================
     // Atom
     //====================================
-    function create_new_atom (x, y) {
+    function create_new_atom (parent_process, x, y) {
 	var newAtom = document.createElementNS(svgns, "use");
 	newAtom.setAttributeNS(xlinkns, "href", "#atom");
 	newAtom.setAttribute("fill", "white");
@@ -228,7 +228,7 @@ window.onload = function () {
 	console.dir(newAtom);
 
 	newAtom.lmntal_process = new Atom("hoge");
-	process_root.push(newAtom.lmntal_process);
+	parent_process.push(newAtom.lmntal_process);
 
 	return newAtom;
     }
@@ -303,7 +303,7 @@ window.onload = function () {
     //====================================
     // Membrane
     //====================================
-    function create_new_memb () {
+    function create_new_memb (parent_process) {
 	var newMemb = document.createElementNS(svgns, "rect");
     	newMemb.setAttribute("rx", "14");
     	newMemb.setAttribute("ry", "14");
@@ -319,16 +319,19 @@ window.onload = function () {
 
 	console.log("create membrane.", newMemb);
 
+	newMemb.lmntal_process = new Membrane();
+	parent_process.push(newMemb.lmntal_process);
+
 	latestmemb = newMemb;
 	return newMemb;
     }
 
     function mousedown_on_memb (e) {
-	mousedown_on_process();
+	mousedown_on_process(this.lmntal_process.process);
     }
 
     function mouseup_on_memb (e) {
-	mouseup_on_process();
+	mouseup_on_process(this.lmntal_process.process);
     }
 
     //====================================
@@ -348,7 +351,7 @@ window.onload = function () {
     //====================================
     // Process Context
     //====================================
-    function create_new_process_context (x, y) {
+    function create_new_process_context (parent_process, x, y) {
 	var newProcessContext = document.createElementNS(svgns, "use");
 	newProcessContext.setAttributeNS(xlinkns, "href", "#process_context");
 	newProcessContext.setAttribute("fill", "white");
@@ -361,6 +364,9 @@ window.onload = function () {
 	set_pos_abs(create_new_text("hoge"), x, y-text_margin);
 
 	console.log("create Process Context.", newProcessContext);
+
+	newProcessContext.lmntal_process = new ProcessContexts("hoge");
+	parent_process.push(newProcessContext.lmntal_process);
 
 	return newProcessContext;
     }

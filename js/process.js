@@ -52,7 +52,7 @@ Rule.prototype.encode = function () {
 };
 
 
-var ProcessContexts = function () {
+var ProcessContexts = function (name) {
     this.name = name;
     this.links = [];
 };
