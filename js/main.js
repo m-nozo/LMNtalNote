@@ -270,9 +270,10 @@ window.onload = function () {
 	var newText = document.createElementNS(svgns, "text");
 	newText.setAttribute("text-anchor", "middle");
 	newText.setAttribute("fill", "white");
-	newText.setAttribute("font-size", "22");
+	newText.setAttribute("font-size", "20");
+    	newText.setAttribute("font-weight", "bold");
     	newText.setAttribute("stroke", "black");
-    	newText.setAttribute("stroke-width", "0.5");
+    	newText.setAttribute("stroke-width", "1");
 	newText.setAttribute("class", "unselectable");
 	newText.textContent = name;
 	layer3.appendChild(newText);
