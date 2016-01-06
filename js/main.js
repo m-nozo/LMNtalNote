@@ -215,6 +215,7 @@ window.onload = function () {
 	var newAtom = document.createElementNS(svgns, "use");
 	newAtom.setAttributeNS(xlinkns, "href", "#atom");
 	newAtom.setAttribute("fill", "white");
+	newAtom.addEventListener("mouseleave", mouseleave_on_atom, false);
 	newAtom.addEventListener("mousedown", mousedown_on_atom, false);
 	newAtom.addEventListener("mouseup", mouseup_on_atom, false);
     	layer4.appendChild(newAtom);
@@ -228,15 +229,26 @@ window.onload = function () {
 	return newAtom;
     }
 
+    function mouseleave_on_atom (e) {
+	if(latestlink != null || !mouse.down) return;
+
+	var atom_pos = get_pos(this);
+    	latestlink = create_new_link();
+	latestlink.setAttribute("x1", atom_pos.x);
+	latestlink.setAttribute("y1", atom_pos.y);
+	// latestlink.setAttribute("x2", atom_pos.x);
+	// latestlink.setAttribute("y2", atom_pos.y);
+    }
+
     function mousedown_on_atom (e) {
 	switch (e.button) {
 	case 0: // left mouse button
-	    var atom_pos = get_pos(this);
-    	    latestlink = create_new_link();
-	    latestlink.setAttribute("x1", atom_pos.x);
-	    latestlink.setAttribute("y1", atom_pos.y);
-	    latestlink.setAttribute("x2", atom_pos.x);
-	    latestlink.setAttribute("y2", atom_pos.y);
+	    // var atom_pos = get_pos(this);
+    	    // latestlink = create_new_link();
+	    // latestlink.setAttribute("x1", atom_pos.x);
+	    // latestlink.setAttribute("y1", atom_pos.y);
+	    // latestlink.setAttribute("x2", atom_pos.x);
+	    // latestlink.setAttribute("y2", atom_pos.y);
 	    break;
 	case 2: // right mouse button
 	    latestatom = this;
