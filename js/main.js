@@ -231,7 +231,7 @@ window.onload = function () {
     }
 
     function mouseleave_on_atom (e) {
-	if(latestlink != null || !mouse.down) return;
+	if(latestlink != null || latestatom != null || !mouse.down) return;
 
 	var atom_pos = get_pos(this);
     	latestlink = create_new_link();
