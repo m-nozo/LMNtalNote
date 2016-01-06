@@ -23,6 +23,7 @@ window.onload = function () {
 
     var mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, scroll:false, mode:"atom"};
     var latestlink = null;
+    var link_creatable = false;
     var latestmemb = null;
     var latestmemb_pos = {x:0, y:0};
     var latestatom = null;
@@ -79,6 +80,8 @@ window.onload = function () {
 	}
 
 	latestatom = null;
+	
+	link_creatable = false;
     }, false);
 
     document.addEventListener("mousemove", function (e) {
@@ -231,7 +234,7 @@ window.onload = function () {
     }
 
     function mouseleave_on_atom (e) {
-	if(latestlink != null || latestatom != null || !mouse.down) return;
+	if(!link_creatable || latestlink != null) return;
 
 	var atom_pos = get_pos(this);
     	latestlink = create_new_link();
@@ -242,6 +245,7 @@ window.onload = function () {
     function mousedown_on_atom (e) {
 	switch (e.button) {
 	case 0: // left mouse button
+	    link_creatable = true;
 	    // var atom_pos = get_pos(this);
     	    // latestlink = create_new_link();
 	    // latestlink.setAttribute("x1", atom_pos.x);
