@@ -195,12 +195,10 @@ window.onload = function () {
 
 	switch (mouse.mode) {
 	case "atom" :
-    	    set_pos_abs(create_new_atom(), guide_pos.x, guide_pos.y);
-    	    set_pos_abs(create_new_text(), guide_pos.x, guide_pos.y-text_margin);
+	    create_new_atom(guide_pos.x, guide_pos.y);
 	    break;
 	case "process_context" :
-    	    set_pos_abs(create_new_process_context(), guide_pos.x, guide_pos.y);
-    	    set_pos_abs(create_new_text(), guide_pos.x, guide_pos.y-text_margin);
+	    create_new_process_context(guide_pos.x, guide_pos.y);
 	    break;
 	case "rule" :
     	    set_pos_abs(create_new_rule(), guide_pos.x, guide_pos.y);
@@ -211,7 +209,7 @@ window.onload = function () {
     //====================================
     // Atom
     //====================================
-    function create_new_atom () {
+    function create_new_atom (x, y) {
 	var newAtom = document.createElementNS(svgns, "use");
 	newAtom.setAttributeNS(xlinkns, "href", "#atom");
 	newAtom.setAttribute("fill", "white");
@@ -219,6 +217,9 @@ window.onload = function () {
 	newAtom.addEventListener("mousedown", mousedown_on_atom, false);
 	newAtom.addEventListener("mouseup", mouseup_on_atom, false);
     	layer4.appendChild(newAtom);
+
+	set_pos_abs(newAtom, x, y);
+	set_pos_abs(create_new_text("hoge"), x, y-text_margin);
 
 	console.log("create atom.");
 	console.dir(newAtom);
@@ -236,8 +237,6 @@ window.onload = function () {
     	latestlink = create_new_link();
 	latestlink.setAttribute("x1", atom_pos.x);
 	latestlink.setAttribute("y1", atom_pos.y);
-	// latestlink.setAttribute("x2", atom_pos.x);
-	// latestlink.setAttribute("y2", atom_pos.y);
     }
 
     function mousedown_on_atom (e) {
@@ -263,13 +262,13 @@ window.onload = function () {
     //====================================
     // Text
     //====================================
-    function create_new_text () {
+    function create_new_text (name) {
 	var newText = document.createElementNS(svgns, "text");
 	newText.setAttribute("text-anchor", "middle");
 	newText.setAttribute("fill", "red");
 	newText.setAttribute("font-size", "22");
 	newText.setAttribute("class", "unselectable");
-	newText.textContent = "hoge";
+	newText.textContent = name;
 	layer3.appendChild(newText);
 
 	console.log("create text.", newText);
@@ -345,13 +344,17 @@ window.onload = function () {
     //====================================
     // Process Context
     //====================================
-    function create_new_process_context () {
+    function create_new_process_context (x, y) {
 	var newProcessContext = document.createElementNS(svgns, "use");
 	newProcessContext.setAttributeNS(xlinkns, "href", "#process_context");
 	newProcessContext.setAttribute("fill", "white");
+	newProcessContext.addEventListener("mouseleave", mouseleave_on_atom, false);
 	newProcessContext.addEventListener("mousedown", mousedown_on_atom, false);
 	newProcessContext.addEventListener("mouseup", mouseup_on_atom, false);
     	layer4.appendChild(newProcessContext);
+
+	set_pos_abs(newProcessContext, x, y);
+	set_pos_abs(create_new_text("hoge"), x, y-text_margin);
 
 	console.log("create Process Context.", newProcessContext);
 
