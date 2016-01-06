@@ -26,9 +26,20 @@ var Atom = function (name) {
     this.parent = null;
     this.name  = name;
     this.links = [];
+    this.angle = 0;
 };
 Atom.prototype.encode = function () {
-    return `${this.name}(${this.links.toString()})`;
+    var sorted_links = this.links.sort(function (a,b) {return ((360+a.angle-this.angle)%360 < (360+b.angle-this.angle)%360) ? -1 : 1});
+    return `${this.name}(${sorted_links.toString()})`;
+};
+
+
+var Link = function (name, angle) {
+    this.name = name;
+    this.angle = angle;
+};
+Link.prototype.toString = function () {
+    return this.name;
 };
 
 
@@ -86,10 +97,3 @@ Rule.prototype.pop = function () {
     this.parent.right = new Empty();
     return this;
 };
-
-/*
-  add link
-*/
-Atom.prototype.addlink = function (target) {
-    this.links.push(new Link(this, target.pop()));
-}
