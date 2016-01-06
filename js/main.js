@@ -219,7 +219,7 @@ window.onload = function () {
 	newAtom.addEventListener("mouseleave", mouseleave_on_atom, false);
 	newAtom.addEventListener("mousedown", mousedown_on_atom, false);
 	newAtom.addEventListener("mouseup", mouseup_on_atom, false);
-    	layer4.appendChild(newAtom);
+    	layer3.appendChild(newAtom);
 
 	set_pos_abs(newAtom, x, y);
 	set_pos_abs(create_new_text("hoge"), x, y-text_margin);
@@ -276,7 +276,7 @@ window.onload = function () {
     	newText.setAttribute("stroke-width", "1");
 	newText.setAttribute("class", "unselectable");
 	newText.textContent = name;
-	layer3.appendChild(newText);
+	layer4.appendChild(newText);
 
 	console.log("create text.", newText);
 
@@ -318,7 +318,7 @@ window.onload = function () {
     	newMemb.setAttribute("stroke-width", "3");
 	newMemb.addEventListener("mousedown", mousedown_on_memb, false);
 	newMemb.addEventListener("mouseup", mouseup_on_memb, false);
-	layer1.appendChild(newMemb);
+	layer3.appendChild(newMemb);
 
 	console.log("create membrane.", newMemb);
 
@@ -330,6 +330,7 @@ window.onload = function () {
     }
 
     function mousedown_on_memb (e) {
+	mouse.scroll = true;
 	mousedown_on_process(this.lmntal_process.process);
     }
 
@@ -344,7 +345,7 @@ window.onload = function () {
 	var newRule = document.createElementNS(svgns, "use");
 	newRule.setAttributeNS(xlinkns, "href", "#rule_arrow");
 	newRule.setAttribute("fill", "white");
-    	layer4.appendChild(newRule);
+    	layer3.appendChild(newRule);
 
 	console.log("create rule.");
 
@@ -361,7 +362,7 @@ window.onload = function () {
 	newProcessContext.addEventListener("mouseleave", mouseleave_on_atom, false);
 	newProcessContext.addEventListener("mousedown", mousedown_on_atom, false);
 	newProcessContext.addEventListener("mouseup", mouseup_on_atom, false);
-    	layer4.appendChild(newProcessContext);
+    	layer3.appendChild(newProcessContext);
 
 	set_pos_abs(newProcessContext, x, y);
 	set_pos_abs(create_new_text("hoge"), x, y-text_margin);
