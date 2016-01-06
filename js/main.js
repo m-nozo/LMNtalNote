@@ -141,6 +141,7 @@ window.onload = function () {
 		latestmemb.setAttribute("height", latestmemb_pos.y-guide_pos.y);
 	    }
 	}
+
 	if (latestatom != null) {
 	    var latestatom_pos_abs = get_pos(latestatom);
 	    var grid_pos = get_pos(grid);
@@ -154,6 +155,7 @@ window.onload = function () {
 					${latestatom_pos_abs.x},
 					${latestatom_pos_abs.y}
 				    )`);
+	    latestatom.lmntal_process.angle = angle;
 	}
     }, false);
 
