@@ -29,15 +29,7 @@ var Atom = function (name) {
     this.angle = 0;
 };
 Atom.prototype.encode = function () {
-    var atom_angle = this.angle;
-    var sorted_links = this.links.sort(function (a,b) {
-	var a_angle = a.angle - atom_angle;
-	var b_angle = b.angle - atom_angle;
-	a_angle = a_angle >= 0 ? a_angle : 360+a_angle;
-	b_angle = b_angle >= 0 ? b_angle : 360+b_angle;
-	return a_angle > b_angle ? 1 : -1;
-    });
-    return `${this.name}(${sorted_links.toString()})`;
+    return `${this.name}(${sort_links(this.links, this.angle).toString()})`;
 };
 
 
@@ -48,7 +40,15 @@ var Link = function (name, angle) {
 Link.prototype.toString = function () {
     return this.name;
 };
-
+function sort_links (links, atom_angle) {
+    return links.sort(function (a,b) {
+	var a_angle = a.angle - atom_angle;
+	var b_angle = b.angle - atom_angle;
+	a_angle = a_angle >= 0 ? a_angle : 360+a_angle;
+	b_angle = b_angle >= 0 ? b_angle : 360+b_angle;
+	return a_angle > b_angle ? 1 : -1;
+    });
+};
 
 var Membrane = function () {
     this.parent = null;
@@ -71,11 +71,13 @@ Rule.prototype.encode = function () {
 
 
 var ProcessContexts = function (name) {
+    this.parent = null;
     this.name = name;
     this.links = [];
+    this.angle = 0;
 };
 ProcessContexts.prototype.encode = function () {
-    return `$${this.name}[${this.links.toString()}]`;
+    return `$${this.name}[${sort_links(this.links, this.angle).toString()}]`;
 };
 
 

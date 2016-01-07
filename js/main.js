@@ -86,7 +86,7 @@ window.onload = function () {
 	}
 
 	latestatom = null;
-	
+	link_from_atom = null;	
 	link_creatable = false;
 
 	console.log(process_root.encode());
