@@ -224,8 +224,15 @@ window.onload = function () {
     // Atom
     //====================================
     function create_new_atom (parent_process, name, x, y) {
+	var atom =  base_atom(parent_process, name, x, y, "#atom");
+	atom.lmntal_process = new Atom(name);
+	parent_process.push(atom.lmntal_process);
+	return atom;
+    }
+
+    function base_atom (parent_process, name, x, y, type) {
 	var newAtom = document.createElementNS(svgns, "use");
-	newAtom.setAttributeNS(xlinkns, "href", "#atom");
+	newAtom.setAttributeNS(xlinkns, "href", type);
 	newAtom.setAttribute("fill", "white");
 	newAtom.addEventListener("mouseleave", mouseleave_on_atom, false);
 	newAtom.addEventListener("mousedown", mousedown_on_atom, false);
@@ -238,9 +245,6 @@ window.onload = function () {
 
 	console.log("create atom.");
 	console.dir(newAtom);
-
-	newAtom.lmntal_process = new Atom(name);
-	parent_process.push(newAtom.lmntal_process);
 
 	return newAtom;
     }
@@ -384,24 +388,11 @@ window.onload = function () {
     // Process Context
     //====================================
     function create_new_process_context (parent_process, name, x, y) {
-	var newProcessContext = document.createElementNS(svgns, "use");
-	newProcessContext.setAttributeNS(xlinkns, "href", "#process_context");
-	newProcessContext.setAttribute("fill", "white");
-	newProcessContext.addEventListener("mouseleave", mouseleave_on_atom, false);
-	newProcessContext.addEventListener("mousedown", mousedown_on_atom, false);
-	newProcessContext.addEventListener("mouseup", mouseup_on_atom, false);
-    	layer3.appendChild(newProcessContext);
-	set_pos_abs(newProcessContext, x, y);
+	var process_ctx =  base_atom(parent_process, name, x, y, "#process_context");
+	process_ctx.lmntal_process = new ProcessContexts(name);
+	parent_process.push(process_ctx.lmntal_process);
 
-	newProcessContext.text = create_new_text(name);
-	set_pos_abs(newProcessContext.text, x, y-text_margin);
-
-	console.log("create Process Context.", newProcessContext);
-
-	newProcessContext.lmntal_process = new ProcessContexts(name);
-	parent_process.push(newProcessContext.lmntal_process);
-
-	return newProcessContext;
+	return process_ctx;
     }
 
     //====================================
