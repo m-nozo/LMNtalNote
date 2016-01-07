@@ -28,6 +28,8 @@ window.onload = function () {
     var link_creatable = false;
     var latestmemb = null;
     var latestmemb_pos = {x:0, y:0};
+    var rulememb = null;
+    var rulememb_pos = {x:0, y:0};
     var latestatom = null;
     var link_from_atom = null;
     rename_atom = null;
@@ -78,6 +80,8 @@ window.onload = function () {
 
 	latestmemb = null;
 	latestmemb_pos = null;
+	rulememb = null;
+	rulememb_pos = null;
 
 	if (latestlink != null) {
 	    var guide_pos = get_pos_rel(grid, guide);
@@ -136,6 +140,9 @@ window.onload = function () {
 
 	if (latestmemb != null) {
 	    drag_membrane(latestmemb, guide_pos.x, guide_pos.y, latestmemb_pos);
+	}
+	if (rulememb != null) {
+	    drag_membrane(rulememb, guide_pos.x, guide_pos.y, rulememb_pos);
 	}
 
 	if (latestatom != null) {
@@ -198,9 +205,25 @@ window.onload = function () {
 	switch (mouse.mode) {
 	case "memb" :
 	    mouse.scroll = false;
-    	    set_pos_abs(create_new_memb(parent_process), guide_pos.x, guide_pos.y);
+	    latestmemb = create_new_memb(parent_process);
+    	    set_pos_abs(latestmemb, guide_pos.x, guide_pos.y);
 	    latestmemb_pos = {
 		x : guide_pos.x,
+		y : guide_pos.y
+	    };
+	    break;
+	case "rule" :
+	    mouse.scroll = false;
+	    latestmemb = create_new_memb(parent_process);
+    	    set_pos_abs(latestmemb, -1000000, guide_pos.y);
+	    latestmemb_pos = {
+		x : -1000000,
+		y : guide_pos.y
+	    };
+	    rulememb = create_new_memb(parent_process);
+    	    set_pos_abs(rulememb, 1000000, guide_pos.y);
+	    rulememb_pos = {
+		x : 1000000,
 		y : guide_pos.y
 	    };
 	    break;
@@ -361,7 +384,6 @@ window.onload = function () {
 	newMemb.lmntal_process = new Membrane();
 	parent_process.push(newMemb.lmntal_process);
 
-	latestmemb = newMemb;
 	return newMemb;
     }
 
