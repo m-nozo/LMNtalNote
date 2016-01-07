@@ -211,6 +211,8 @@ window.onload = function () {
 		x : guide_pos.x,
 		y : guide_pos.y
 	    };
+	    parent_process.push(latestmemb.lmntal_process);
+
 	    break;
 	case "rule" :
 	    mouse.scroll = false;
@@ -231,7 +233,7 @@ window.onload = function () {
     }
 
     function mouseup_on_process (parent_process) {
-	if(mouse.moved) return;
+	if(mouse.moved && mouse.mode!="rule") return;
 	var guide_pos = get_pos_rel(grid, guide);
 
 	switch (mouse.mode) {
@@ -242,7 +244,7 @@ window.onload = function () {
 	    create_new_process_context(parent_process, "p",guide_pos.x, guide_pos.y);
 	    break;
 	case "rule" :
-    	    set_pos_abs(create_new_rule(), guide_pos.x, guide_pos.y);
+    	    set_pos_abs(create_new_rule(process_root), guide_pos.x, rulememb_pos.y);
 	    break;
 	}
     }
@@ -382,7 +384,6 @@ window.onload = function () {
 	console.log("create membrane.", newMemb);
 
 	newMemb.lmntal_process = new Membrane();
-	parent_process.push(newMemb.lmntal_process);
 
 	return newMemb;
     }
@@ -399,13 +400,18 @@ window.onload = function () {
     //====================================
     // Rule
     //====================================
-    function create_new_rule () {
+    function create_new_rule (parent_process) {
 	var newRule = document.createElementNS(svgns, "use");
 	newRule.setAttributeNS(xlinkns, "href", "#rule_arrow");
 	newRule.setAttribute("fill", "white");
     	layer3.appendChild(newRule);
 
 	console.log("create rule.");
+
+	newRule.lmntal_process = new Rule();
+	newRule.lmntal_process.head.push(latestmemb.lmntal_process);
+	newRule.lmntal_process.body.push(rulememb.lmntal_process);
+	parent_process.push(newRule.lmntal_process);
 
 	return newRule;
     }

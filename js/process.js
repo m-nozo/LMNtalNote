@@ -66,7 +66,7 @@ var Rule = function () {
     this.guard = '';
 };
 Rule.prototype.encode = function () {
-    return `( ${this.head.encode()} :- ${this.guard.encode()} | ${this.body.encode()} )`;
+    return `(${this.head.encode()}:-${this.guard}|${this.body.encode()})`;
 };
 
 
