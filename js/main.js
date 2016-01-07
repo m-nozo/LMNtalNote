@@ -2,6 +2,8 @@ window.onload = function () {
     var svgns = "http://www.w3.org/2000/svg";
     var xlinkns = "http://www.w3.org/1999/xlink";
 
+    textbox = document.getElementById("textbox");
+
     svg = document.getElementById("svg");
     var bg = svg.children.bg;
     var guide = svg.children.guide;
@@ -28,9 +30,9 @@ window.onload = function () {
     var latestmemb_pos = {x:0, y:0};
     var latestatom = null;
     var link_from_atom = null;
+    rename_atom = null;
 
     var link_index = 0;
-    var atom_index = 0;
 
     var text_margin = 22;
 
@@ -207,10 +209,10 @@ window.onload = function () {
 
 	switch (mouse.mode) {
 	case "atom" :
-	    create_new_atom(parent_process, "hoge"+atom_index++, guide_pos.x, guide_pos.y);
+	    create_new_atom(parent_process, "a", guide_pos.x, guide_pos.y);
 	    break;
 	case "process_context" :
-	    create_new_process_context(parent_process, guide_pos.x, guide_pos.y);
+	    create_new_process_context(parent_process, "p",guide_pos.x, guide_pos.y);
 	    break;
 	case "rule" :
     	    set_pos_abs(create_new_rule(), guide_pos.x, guide_pos.y);
@@ -275,6 +277,11 @@ window.onload = function () {
 	    add_link(this.lmntal_process, new Link("L"+link_index, (angle+180) < 360 ? (angle+180) : (angle+180) - 360));
 	    link_index++;
 	}
+
+	if (!mouse.move) {
+	    rename_atom = this;
+	    textbox.value = this.lmntal_process.name;
+	}
     }
 
     //====================================
@@ -296,6 +303,13 @@ window.onload = function () {
 
 	return newText;
     }
+
+    textbox.addEventListener("keyup", function () {
+	if (rename_atom != null) {
+	    rename_atom.text.textContent = this.value;
+	    rename_atom.lmntal_process.name = this.value;
+	}
+    }, false);
 
     //====================================
     // Link
@@ -369,7 +383,7 @@ window.onload = function () {
     //====================================
     // Process Context
     //====================================
-    function create_new_process_context (parent_process, x, y) {
+    function create_new_process_context (parent_process, name, x, y) {
 	var newProcessContext = document.createElementNS(svgns, "use");
 	newProcessContext.setAttributeNS(xlinkns, "href", "#process_context");
 	newProcessContext.setAttribute("fill", "white");
@@ -377,13 +391,14 @@ window.onload = function () {
 	newProcessContext.addEventListener("mousedown", mousedown_on_atom, false);
 	newProcessContext.addEventListener("mouseup", mouseup_on_atom, false);
     	layer3.appendChild(newProcessContext);
-
 	set_pos_abs(newProcessContext, x, y);
-	set_pos_abs(create_new_text("hoge"), x, y-text_margin);
+
+	newProcessContext.text = create_new_text(name);
+	set_pos_abs(newProcessContext.text, x, y-text_margin);
 
 	console.log("create Process Context.", newProcessContext);
 
-	newProcessContext.lmntal_process = new ProcessContexts("hoge");
+	newProcessContext.lmntal_process = new ProcessContexts(name);
 	parent_process.push(newProcessContext.lmntal_process);
 
 	return newProcessContext;
