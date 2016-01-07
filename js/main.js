@@ -135,19 +135,7 @@ window.onload = function () {
 	}
 
 	if (latestmemb != null) {
-	    if (guide_pos.x > latestmemb_pos.x) {
-		latestmemb.setAttribute("width", guide_pos.x-latestmemb_pos.x);
-	    } else {
- 		latestmemb.setAttribute("x", guide_pos.x);
-		latestmemb.setAttribute("width", latestmemb_pos.x-guide_pos.x);
-	    }
-
-	    if (guide_pos.y > latestmemb_pos.y) {
-		latestmemb.setAttribute("height", guide_pos.y-latestmemb_pos.y);
-	    } else {
- 		latestmemb.setAttribute("y", guide_pos.y);
-		latestmemb.setAttribute("height", latestmemb_pos.y-guide_pos.y);
-	    }
+	    drag_membrane(latestmemb, guide_pos.x, guide_pos.y, latestmemb_pos);
 	}
 
 	if (latestatom != null) {
@@ -167,6 +155,22 @@ window.onload = function () {
 	    latestatom.lmntal_process.angle = angle;
 	}
     }, false);
+
+    function drag_membrane (memb, x, y, base_pos) {
+	if (x > base_pos.x) {
+	    memb.setAttribute("width", x - base_pos.x);
+	} else {
+	    memb.setAttribute("x", x);
+	    memb.setAttribute("width", base_pos.x - x);
+	}
+
+	if (y > base_pos.y) {
+	    memb.setAttribute("height", y - base_pos.y);
+	} else {
+	    memb.setAttribute("y", y);
+	    memb.setAttribute("height", base_pos.y - y);
+	}
+    }
 
     //====================================
     // Background event
