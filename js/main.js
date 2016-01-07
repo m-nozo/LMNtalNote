@@ -27,6 +27,10 @@ window.onload = function () {
     var latestmemb = null;
     var latestmemb_pos = {x:0, y:0};
     var latestatom = null;
+    var link_from_atom = null;
+
+    var link_index = 0;
+    var atom_index = 0;
 
     var text_margin = 22;
 
@@ -82,6 +86,8 @@ window.onload = function () {
 	latestatom = null;
 	
 	link_creatable = false;
+
+	console.log(process_root.encode());
     }, false);
 
     document.addEventListener("mousemove", function (e) {
@@ -145,10 +151,11 @@ window.onload = function () {
 	if (latestatom != null) {
 	    var latestatom_pos_abs = get_pos(latestatom);
 	    var grid_pos = get_pos(grid);
-	    var angle = -Math.atan2(
-		(latestatom_pos_abs.x+grid_pos.x)-mouse.x,
-		(latestatom_pos_abs.y+grid_pos.y)-mouse.y
-	    ) / Math.PI*180;
+	    var angle = get_angle(
+		{x:latestatom_pos_abs.x + grid_pos.x,
+		 y:latestatom_pos_abs.y + grid_pos.y
+		}, mouse);
+
 	    latestatom.setAttribute("transform",
 				    `rotate(
 					${angle},
@@ -224,14 +231,15 @@ window.onload = function () {
     	layer3.appendChild(newAtom);
 
 	set_pos_abs(newAtom, x, y);
-	set_pos_abs(create_new_text("hoge"), x, y-text_margin);
+	set_pos_abs(create_new_text("hoge"+atom_index), x, y-text_margin);
 
 	console.log("create atom.");
 	console.dir(newAtom);
 
-	newAtom.lmntal_process = new Atom("hoge");
+	newAtom.lmntal_process = new Atom("hoge"+atom_index);
 	parent_process.push(newAtom.lmntal_process);
 
+	atom_index++;
 	return newAtom;
     }
 
@@ -242,18 +250,13 @@ window.onload = function () {
     	latestlink = create_new_link();
 	latestlink.setAttribute("x1", atom_pos.x);
 	latestlink.setAttribute("y1", atom_pos.y);
+	link_from_atom = this;
     }
 
     function mousedown_on_atom (e) {
 	switch (e.button) {
 	case 0: // left mouse button
 	    link_creatable = true;
-	    // var atom_pos = get_pos(this);
-    	    // latestlink = create_new_link();
-	    // latestlink.setAttribute("x1", atom_pos.x);
-	    // latestlink.setAttribute("y1", atom_pos.y);
-	    // latestlink.setAttribute("x2", atom_pos.x);
-	    // latestlink.setAttribute("y2", atom_pos.y);
 	    break;
 	case 2: // right mouse button
 	    latestatom = this;
@@ -263,6 +266,15 @@ window.onload = function () {
 
     function mouseup_on_atom (e) {
 	latestlink = null;
+
+	if (link_from_atom != null) {
+	    var from_atom_pos = get_pos(link_from_atom);
+	    var to_atom_pos = get_pos(this);
+	    var angle = get_angle(from_atom_pos, to_atom_pos);
+	    add_link(link_from_atom.lmntal_process, new Link("L"+link_index, angle));
+	    add_link(this.lmntal_process, new Link("L"+link_index, (angle+180) < 360 ? (angle+180) : (angle+180) - 360));
+	    link_index++;
+	}
     }
 
     //====================================
@@ -448,6 +460,16 @@ window.onload = function () {
     function move(obj, dx, dy) {
 	var obj_pos = get_pos(obj);
 	set_pos_abs(obj, obj_pos.x+dx, obj_pos.y+dy);
+    }
+
+    // get angle (clockwise)
+    function get_angle (from, to) {
+	var angle = Math.atan2(
+	    to.y - from.y,
+	    to.x - from.x
+	) / Math.PI*180 + 90;
+
+	return angle >= 0 ? angle : angle+360;	
     }
 }
 
