@@ -207,7 +207,7 @@ window.onload = function () {
 
 	switch (mouse.mode) {
 	case "atom" :
-	    create_new_atom(parent_process, guide_pos.x, guide_pos.y);
+	    create_new_atom(parent_process, "hoge"+atom_index++, guide_pos.x, guide_pos.y);
 	    break;
 	case "process_context" :
 	    create_new_process_context(parent_process, guide_pos.x, guide_pos.y);
@@ -221,7 +221,7 @@ window.onload = function () {
     //====================================
     // Atom
     //====================================
-    function create_new_atom (parent_process, x, y) {
+    function create_new_atom (parent_process, name, x, y) {
 	var newAtom = document.createElementNS(svgns, "use");
 	newAtom.setAttributeNS(xlinkns, "href", "#atom");
 	newAtom.setAttribute("fill", "white");
@@ -229,17 +229,17 @@ window.onload = function () {
 	newAtom.addEventListener("mousedown", mousedown_on_atom, false);
 	newAtom.addEventListener("mouseup", mouseup_on_atom, false);
     	layer3.appendChild(newAtom);
-
 	set_pos_abs(newAtom, x, y);
-	set_pos_abs(create_new_text("hoge"+atom_index), x, y-text_margin);
+	
+	newAtom.text = create_new_text(name);
+	set_pos_abs(newAtom.text, x, y-text_margin);
 
 	console.log("create atom.");
 	console.dir(newAtom);
 
-	newAtom.lmntal_process = new Atom("hoge"+atom_index);
+	newAtom.lmntal_process = new Atom(name);
 	parent_process.push(newAtom.lmntal_process);
 
-	atom_index++;
 	return newAtom;
     }
 

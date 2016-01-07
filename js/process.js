@@ -37,7 +37,7 @@ Atom.prototype.encode = function () {
 	b_angle = b_angle >= 0 ? b_angle : 360+b_angle;
 	return a_angle > b_angle ? 1 : -1;
     });
-    return `${this.name}:${this.angle|0}(${sorted_links.toString()})`;
+    return `${this.name}(${sorted_links.toString()})`;
 };
 
 
@@ -46,7 +46,7 @@ var Link = function (name, angle) {
     this.angle = angle;
 };
 Link.prototype.toString = function () {
-    return `${this.name}:${this.angle}`;
+    return this.name;
 };
 
 
