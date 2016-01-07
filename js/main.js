@@ -487,30 +487,3 @@ window.onload = function () {
 	return angle >= 0 ? angle : angle+360;	
     }
 }
-
-
-// // update position of 
-// document.addEventListener("touchmove", function (e) {
-// 	mouse.move = true;
-// 	mouse.px = mouse.x;
-// 	mouse.py = mouse.y;
-// 	mouse.x = e.changedTouches[0].pageX | 0;
-// 	mouse.y = e.changedTouches[0].pageY | 0;
-// }, false);
-
-// // prevent default touchmove event
-// document.addEventListener("touchmove", function (e) {
-// 	e.preventDefault();
-// }, false);
-
-// // touch event setting
-// bg.addEventListener("touchstart", function (e) {
-// 	mouse.move = false;
-// 	mouse.down = true;
-// 	mouse.x = e.changedTouches[0].pageX | 0;
-// 	mouse.y = e.changedTouches[0].pageY | 0;
-// 	mouse.px = mouse.x;
-// 	mouse.py = mouse.y;
-// }, false);
-
-// bg.addEventListener("touchmove", bg_scroll, false);
