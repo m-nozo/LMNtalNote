@@ -223,23 +223,7 @@ window.onload = function () {
 	    break;
 	case "rule" :
 	    mouse.scroll = false;
-	    latestmemb = create_new_memb(parent_process);
-	    latestmemb.setAttribute("fill","green");
-    	    set_pos_abs(latestmemb, -1000000, guide_pos.y);
-	    latestmemb_pos = {
-		x : -1000000,
-		y : guide_pos.y
-	    };
-	    rulememb = create_new_memb(parent_process);
-	    rulememb.setAttribute("fill","green");
-    	    set_pos_abs(rulememb, 1000000, guide_pos.y);
-	    rulememb_pos = {
-		x : 1000000,
-		y : guide_pos.y
-	    };
-	    latestrule = create_new_rule(parent_process);
-	    latestmemb.lmntal_process = {root:latestrule.lmntal_process.head};
-	    rulememb.lmntal_process = {root:latestrule.lmntal_process.body};
+	    latestrule = create_new_rule(parent_process, guide_pos.x, guide_pos.y);
 	    break;
 	}
     }
@@ -415,18 +399,56 @@ window.onload = function () {
     //====================================
     // Rule
     //====================================
-    function create_new_rule (parent_process) {
+    function create_new_rule (parent_process, x, y) {
 	var newRule = document.createElementNS(svgns, "use");
 	newRule.setAttributeNS(xlinkns, "href", "#rule_arrow");
 	newRule.setAttribute("fill", "white");
-    	layer3.appendChild(newRule);
 
 	console.log("create rule.");
 
 	newRule.lmntal_process = new Rule();
 	parent_process.push(newRule.lmntal_process);
 
+	// create rulemembs
+	latestmemb = create_new_memb(parent_process);
+	latestmemb.setAttribute("fill","green");
+    	set_pos_abs(latestmemb, -1000000, y);
+	latestmemb_pos = {
+	    x : -1000000,
+	    y : y
+	};
+	rulememb = create_new_memb(parent_process);
+	rulememb.setAttribute("fill","green");
+    	set_pos_abs(rulememb, 1000000, y);
+	rulememb_pos = {
+	    x : 1000000,
+	    y : y
+	};
+
+	// set head/body of rule to rulemembs.
+	latestmemb.lmntal_process = {root:newRule.lmntal_process.head};
+	rulememb.lmntal_process = {root:newRule.lmntal_process.body};
+
+	// set rule obj to rulemembs
+	latestmemb.rule = newRule;
+	rulememb.rule = newRule;
+
+	latestmemb.addEventListener("mouseup", mouseup_on_rulememb, false);
+	rulememb.addEventListener("mouseup", mouseup_on_rulememb, false);
+
+    	layer3.appendChild(newRule);
+
 	return newRule;
+    }
+
+    function mouseup_on_rulememb (e) {
+	if (latestlink != null) {
+	    var guide_pos = get_pos_rel(grid, guide);
+	    var rulearrow_pos = get_pos(this.rule);
+	    set_pos_abs(create_new_free_link(), guide_pos.x, guide_pos.y);
+	    set_pos_abs(create_new_free_link(), 2*rulearrow_pos.x-guide_pos.x, guide_pos.y);
+	    latestlink = null;
+	}
     }
 
     //====================================
@@ -446,9 +468,14 @@ window.onload = function () {
     function create_new_free_link () {
 	var newFreeLink = document.createElementNS(svgns, "use");
 	newFreeLink.setAttributeNS(xlinkns, "href", "#free_link");
+	newFreeLink.addEventListener("mouseleave", mouseleave_on_atom, false);
+	newFreeLink.addEventListener("mousedown", mousedown_on_atom, false);
+	newFreeLink.addEventListener("mouseup", mouseup_on_atom, false);
 	layer4.appendChild(newFreeLink);
 
 	console.log("create free link.");
+
+	newFreeLink.lmntal_process = new Atom();
 
 	return newFreeLink;
     }
