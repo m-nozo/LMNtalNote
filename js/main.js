@@ -308,10 +308,12 @@ window.onload = function () {
     function mouseup_on_atom (e) {
 	latestlink = null;
 
-	if(link_from_atom.linkname == undefined)
-	    conect_atom(link_from_atom, this, "L"+link_index++);
-	else
-	    conect_atom(link_from_atom, this, link_from_atom.linkname);
+	if(link_from_atom != null) {
+	    if(link_from_atom.linkname == undefined)
+		conect_atom(link_from_atom, this, "L"+link_index++);
+	    else
+		conect_atom(link_from_atom, this, link_from_atom.linkname);
+	}
 
 	if (!mouse.move) {
 	    rename_atom = this;
@@ -516,7 +518,7 @@ window.onload = function () {
 
     function mouseup_on_freelink (e) {
 	latestlink = null;
-	
+	if(link_from_atom == null) return;
 	if (link_from_atom.linkname == undefined) {
 	    conect_atom(link_from_atom, this, this.linkname);
 	} else {
