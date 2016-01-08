@@ -85,8 +85,9 @@ window.onload = function () {
 	rulememb_pos = null;
 
 	if (latestlink != null) {
-	    var guide_pos = get_pos_rel(grid, guide);
-	    set_pos_abs(create_new_free_link(), guide_pos.x, guide_pos.y);
+	    // var guide_pos = get_pos_rel(grid, guide);
+	    // set_pos_abs(create_new_free_link(), guide_pos.x, guide_pos.y);
+	    latestlink.parentNode.removeChild(latestlink);
 	    latestlink = null;
 	}
 
@@ -112,12 +113,12 @@ window.onload = function () {
 
 	switch (mouse.mode) {
 	case "process_context" :
-	case "rule" :
 	case "atom" : // set guide pos in atom mode
 	    guide_pos = get_grid_cross_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
 	    set_pos_rel(grid, guide, guide_pos.x, guide_pos.y);
 	    break;
-	    
+
+	case "rule" :
 	case "memb" : // set guide pos in memb mode
 	    guide_pos = get_grid_mid_pos(mouse.x-grid_pos.x, mouse.y-grid_pos.y);
 	    set_pos_rel(grid, guide, guide_pos.x, guide_pos.y);
