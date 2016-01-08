@@ -449,6 +449,10 @@ window.onload = function () {
 	head_rulememb.rule = newRule;
 	body_rulememb.rule = newRule;
 
+	// set rulememb to rule obj
+	newRule.head = head_rulememb;
+	newRule.body = body_rulememb;
+	
 	head_rulememb.addEventListener("mouseup", mouseup_on_rulememb, false);
 	body_rulememb.addEventListener("mouseup", mouseup_on_rulememb, false);
 
@@ -464,15 +468,15 @@ window.onload = function () {
 	    var rulearrow_pos = get_pos(this.rule);
 	    var rule_width = Number(this.getAttribute("width"));
 	   
-	    var freelink = create_new_free_link("L"+link_index++);
+	    var freelink = create_new_free_link(this, "L"+link_index++);
 	    set_pos_abs(freelink, guide_pos.x, guide_pos.y);
 	    conect_atom(link_from_atom, freelink, freelink.linkname)
 
 	    // add free link to the other rulememb
 	    if (guide_pos.x < rulearrow_pos.x)
-		set_pos_abs(create_new_free_link(freelink.linkname), guide_pos.x+rule_width, guide_pos.y);
+		set_pos_abs(create_new_free_link(this.rule.body, freelink.linkname), guide_pos.x+rule_width, guide_pos.y);
 	    else
-		set_pos_abs(create_new_free_link(freelink.linkname), guide_pos.x-rule_width, guide_pos.y);
+		set_pos_abs(create_new_free_link(this.rule.head, freelink.linkname), guide_pos.x-rule_width, guide_pos.y);
 
 	    latestlink = null;
 	}
@@ -492,7 +496,7 @@ window.onload = function () {
     //====================================
     // Free Link
     //====================================
-    function create_new_free_link (linkname) {
+    function create_new_free_link (parent_process, linkname) {
 	var newFreeLink = document.createElementNS(svgns, "use");
 	newFreeLink.setAttributeNS(xlinkns, "href", "#free_link");
 	newFreeLink.addEventListener("mouseleave", mouseleave_on_atom, false);
@@ -505,13 +509,22 @@ window.onload = function () {
 	console.log("create free link.");
 
 	newFreeLink.lmntal_process = new Atom();
+	newFreeLink.parent_process = parent_process;
 
 	return newFreeLink;
     }
 
     function mouseup_on_freelink (e) {
 	latestlink = null;
-	conect_atom(link_from_atom, this, this.linkname);
+	
+	if (link_from_atom.linkname == undefined) {
+	    conect_atom(link_from_atom, this, this.linkname);
+	} else {
+	    var equal_atom = new Atom('"="');
+	    add_link(equal_atom, new Link(link_from_atom.linkname, 0));
+	    add_link(equal_atom, new Link(this.linkname, 0));
+	    this.parent_process.lmntal_process.root.push(equal_atom);
+	}
     }
 
     //====================================
