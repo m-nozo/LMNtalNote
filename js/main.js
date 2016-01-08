@@ -24,19 +24,27 @@ window.onload = function () {
     var tool_process_context = svg.children.tool_process_context;
 
     var mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, scroll:false, mode:"atom"};
+
+    // link
     var latestlink = null;
     var link_creatable = false;
+
+    // memb
     var latestmemb = null;
     var latestmemb_pos = {x:0, y:0};
-    var rulememb = null;
+    var head_rulememb = null;
+    var body_rulememb = null;
     var rulememb_pos = {x:0, y:0};
+
+    // atom
     var latestatom = null;
     var link_from_atom = null;
     var rename_atom = null;
+
+    // rule
     var latestrule = null;
 
     var link_index = 0;
-
     var text_margin = 22;
 
     process_root = new Process();
@@ -81,7 +89,8 @@ window.onload = function () {
 
 	latestmemb = null;
 	latestmemb_pos = null;
-	rulememb = null;
+	head_rulememb = null;
+	body_rulememb = null;
 	rulememb_pos = null;
 
 	if (latestlink != null) {
@@ -143,8 +152,10 @@ window.onload = function () {
 	if (latestmemb != null) {
 	    drag_membrane(latestmemb, guide_pos.x, guide_pos.y, latestmemb_pos);
 	}
-	if (rulememb != null) {
-	    drag_membrane(rulememb, guide_pos.x, guide_pos.y, rulememb_pos);
+
+	if (head_rulememb != null && body_rulememb) {
+	    drag_membrane(head_rulememb, 2*rulememb_pos.x-guide_pos.x, guide_pos.y, rulememb_pos);
+	    drag_membrane(body_rulememb, guide_pos.x, guide_pos.y, rulememb_pos);
 	}
 
 	if (latestatom != null) {
@@ -240,7 +251,8 @@ window.onload = function () {
 	    create_new_process_context(parent_process, "p",guide_pos.x, guide_pos.y);
 	    break;
 	case "rule" :
-    	    if(latestrule != null && rulememb_pos != null)set_pos_abs(latestrule, guide_pos.x, rulememb_pos.y);
+    	    if(latestrule != null && rulememb_pos != null)
+		set_pos_abs(latestrule, rulememb_pos.x, rulememb_pos.y);
 	    break;
 	}
     }
@@ -410,31 +422,31 @@ window.onload = function () {
 	parent_process.push(newRule.lmntal_process);
 
 	// create rulemembs
-	latestmemb = create_new_memb(parent_process);
-	latestmemb.setAttribute("fill","green");
-    	set_pos_abs(latestmemb, -1000000, y);
-	latestmemb_pos = {
-	    x : -1000000,
+	head_rulememb = create_new_memb(parent_process);
+	head_rulememb.setAttribute("fill","green");
+    	set_pos_abs(head_rulememb, x, y);
+	rulememb_pos = {
+	    x : x,
 	    y : y
 	};
-	rulememb = create_new_memb(parent_process);
-	rulememb.setAttribute("fill","green");
-    	set_pos_abs(rulememb, 1000000, y);
+	body_rulememb = create_new_memb(parent_process);
+	body_rulememb.setAttribute("fill","green");
+    	set_pos_abs(body_rulememb, x, y);
 	rulememb_pos = {
-	    x : 1000000,
+	    x : x,
 	    y : y
 	};
 
 	// set head/body of rule to rulemembs.
-	latestmemb.lmntal_process = {root:newRule.lmntal_process.head};
-	rulememb.lmntal_process = {root:newRule.lmntal_process.body};
+	head_rulememb.lmntal_process = {root:newRule.lmntal_process.head};
+	body_rulememb.lmntal_process = {root:newRule.lmntal_process.body};
 
 	// set rule obj to rulemembs
-	latestmemb.rule = newRule;
-	rulememb.rule = newRule;
+	head_rulememb.rule = newRule;
+	body_rulememb.rule = newRule;
 
-	latestmemb.addEventListener("mouseup", mouseup_on_rulememb, false);
-	rulememb.addEventListener("mouseup", mouseup_on_rulememb, false);
+	head_rulememb.addEventListener("mouseup", mouseup_on_rulememb, false);
+	body_rulememb.addEventListener("mouseup", mouseup_on_rulememb, false);
 
     	layer3.appendChild(newRule);
 
