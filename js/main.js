@@ -457,8 +457,13 @@ window.onload = function () {
 	if (latestlink != null) {
 	    var guide_pos = get_pos_rel(grid, guide);
 	    var rulearrow_pos = get_pos(this.rule);
+	    var rule_width = Number(this.getAttribute("width"));
 	    set_pos_abs(create_new_free_link(), guide_pos.x, guide_pos.y);
-	    set_pos_abs(create_new_free_link(), 2*rulearrow_pos.x-guide_pos.x, guide_pos.y);
+
+	    if (guide_pos.x < rulearrow_pos.x)
+		set_pos_abs(create_new_free_link(), guide_pos.x+rule_width, guide_pos.y);
+	    else
+		set_pos_abs(create_new_free_link(), guide_pos.x-rule_width, guide_pos.y);
 	    latestlink = null;
 	}
     }
