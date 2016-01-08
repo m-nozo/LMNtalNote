@@ -33,7 +33,7 @@ window.onload = function () {
     var latestatom = null;
     var link_from_atom = null;
     var rename_atom = null;
-    var latest_rule = null;
+    var latestrule = null;
 
     var link_index = 0;
 
@@ -185,8 +185,12 @@ window.onload = function () {
     //====================================
     // mouse event setting
     bg.addEventListener("mousedown", function (e) {
-	mouse.scroll = true;
-	mousedown_on_process(process_root);
+	switch (e.button) {
+	// left mouse button
+	case 0: mousedown_on_process(process_root); break;
+	// right mouse button
+	case 2:	mouse.scroll = true; break;
+	}
     }, false);
 
     bg.addEventListener("mouseup", function (e) {
@@ -249,7 +253,7 @@ window.onload = function () {
 	    create_new_process_context(parent_process, "p",guide_pos.x, guide_pos.y);
 	    break;
 	case "rule" :
-    	    set_pos_abs(latestrule, guide_pos.x, rulememb_pos.y);
+    	    if(latestrule != null && rulememb_pos != null)set_pos_abs(latestrule, guide_pos.x, rulememb_pos.y);
 	    break;
 	}
     }
@@ -393,8 +397,12 @@ window.onload = function () {
     }
 
     function mousedown_on_memb (e) {
-	mouse.scroll = true;
-	mousedown_on_process(this.lmntal_process.root);
+	switch (e.button) {
+	// left mouse button
+	case 0: mousedown_on_process(this.lmntal_process.root); break;
+	// right mouse button
+	case 2: mouse.scroll = true; break;
+	}
     }
 
     function mouseup_on_memb (e) {
