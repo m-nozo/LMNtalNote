@@ -94,8 +94,6 @@ window.onload = function () {
 	rulememb_pos = null;
 
 	if (latestlink != null) {
-	    // var guide_pos = get_pos_rel(grid, guide);
-	    // set_pos_abs(create_new_free_link(), guide_pos.x, guide_pos.y);
 	    latestlink.parentNode.removeChild(latestlink);
 	    latestlink = null;
 	}
@@ -310,19 +308,25 @@ window.onload = function () {
     function mouseup_on_atom (e) {
 	latestlink = null;
 
-	if (link_from_atom != null) {
-	    var from_atom_pos = get_pos(link_from_atom);
-	    var to_atom_pos = get_pos(this);
-	    var angle = get_angle(from_atom_pos, to_atom_pos);
-	    add_link(link_from_atom.lmntal_process, new Link("L"+link_index, angle));
-	    add_link(this.lmntal_process, new Link("L"+link_index, (angle+180) < 360 ? (angle+180) : (angle+180) - 360));
-	    link_index++;
-	}
+	if(link_from_atom.linkname == undefined)
+	    conect_atom(link_from_atom, this, "L"+link_index++);
+	else
+	    conect_atom(link_from_atom, this, link_from_atom.linkname);
 
 	if (!mouse.move) {
 	    rename_atom = this;
 	    textbox.value = this.lmntal_process.name;
 	}
+    }
+
+    function conect_atom (from_atom, to_atom, linkname) {
+	if (from_atom == null || to_atom == null) return;
+	var from_atom_pos = get_pos(from_atom);
+	var to_atom_pos = get_pos(to_atom);
+	var angle = get_angle(from_atom_pos, to_atom_pos);
+	add_link(from_atom.lmntal_process, new Link(linkname, angle));
+	angle += 180;
+	add_link(to_atom.lmntal_process, new Link(linkname, angle < 360 ? angle : angle - 360));
     }
 
     //====================================
@@ -454,16 +458,22 @@ window.onload = function () {
     }
 
     function mouseup_on_rulememb (e) {
+	// set free link on rulemembs
 	if (latestlink != null) {
 	    var guide_pos = get_pos_rel(grid, guide);
 	    var rulearrow_pos = get_pos(this.rule);
 	    var rule_width = Number(this.getAttribute("width"));
-	    set_pos_abs(create_new_free_link(), guide_pos.x, guide_pos.y);
+	   
+	    var freelink = create_new_free_link("L"+link_index++);
+	    set_pos_abs(freelink, guide_pos.x, guide_pos.y);
+	    conect_atom(link_from_atom, freelink, freelink.linkname)
 
+	    // add free link to the other rulememb
 	    if (guide_pos.x < rulearrow_pos.x)
-		set_pos_abs(create_new_free_link(), guide_pos.x+rule_width, guide_pos.y);
+		set_pos_abs(create_new_free_link(freelink.linkname), guide_pos.x+rule_width, guide_pos.y);
 	    else
-		set_pos_abs(create_new_free_link(), guide_pos.x-rule_width, guide_pos.y);
+		set_pos_abs(create_new_free_link(freelink.linkname), guide_pos.x-rule_width, guide_pos.y);
+
 	    latestlink = null;
 	}
     }
@@ -482,19 +492,26 @@ window.onload = function () {
     //====================================
     // Free Link
     //====================================
-    function create_new_free_link () {
+    function create_new_free_link (linkname) {
 	var newFreeLink = document.createElementNS(svgns, "use");
 	newFreeLink.setAttributeNS(xlinkns, "href", "#free_link");
 	newFreeLink.addEventListener("mouseleave", mouseleave_on_atom, false);
 	newFreeLink.addEventListener("mousedown", mousedown_on_atom, false);
-	newFreeLink.addEventListener("mouseup", mouseup_on_atom, false);
+	newFreeLink.addEventListener("mouseup", mouseup_on_freelink, false);
 	layer4.appendChild(newFreeLink);
+
+	newFreeLink.linkname = linkname;
 
 	console.log("create free link.");
 
 	newFreeLink.lmntal_process = new Atom();
 
 	return newFreeLink;
+    }
+
+    function mouseup_on_freelink (e) {
+	latestlink = null;
+	conect_atom(link_from_atom, this, this.linkname);
     }
 
     //====================================
