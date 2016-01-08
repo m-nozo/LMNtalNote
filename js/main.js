@@ -74,6 +74,7 @@ window.onload = function () {
     // Document event
     //====================================
     document.addEventListener("contextmenu", function (e) {
+	// prevent to show menu of right click
 	e.preventDefault();
     }, false);
 
@@ -83,28 +84,32 @@ window.onload = function () {
     }, false);
 
     document.addEventListener("mouseup", function (e) {
+	// reset mouse state
 	mouse.moved = false;
 	mouse.down = false;
 	mouse.scroll = false;
 
+	// reset etc state
 	latestmemb = null;
 	latestmemb_pos = null;
 	head_rulememb = null;
 	body_rulememb = null;
 	rulememb_pos = null;
+	latestatom = null;
+	link_from_atom = null;	
+	link_creatable = false;
 
+	// cancel creating link
 	if (latestlink != null) {
 	    latestlink.parentNode.removeChild(latestlink);
 	    latestlink = null;
 	}
 
-	latestatom = null;
-	link_from_atom = null;	
-	link_creatable = false;
-
+	// encode to lmntal program
 	console.log(process_root.encode());
     }, false);
 
+    // update mouse position
     document.addEventListener("mousemove", function (e) {
 	mouse.moved = true;
 	mouse.px = mouse.x;
@@ -142,20 +147,24 @@ window.onload = function () {
     document.addEventListener("mousemove", function (e) {
 	var guide_pos = get_pos_rel(grid, guide);
 
+	// link animation
 	if (latestlink != null) {
 	    latestlink.setAttribute("x2", guide_pos.x);
 	    latestlink.setAttribute("y2", guide_pos.y);
 	}
 
+	// membrane animation
 	if (latestmemb != null) {
 	    drag_membrane(latestmemb, guide_pos.x, guide_pos.y, latestmemb_pos);
 	}
 
+	// rule animation
 	if (head_rulememb != null && body_rulememb) {
 	    drag_membrane(head_rulememb, 2*rulememb_pos.x-guide_pos.x, guide_pos.y, rulememb_pos);
 	    drag_membrane(body_rulememb, guide_pos.x, guide_pos.y, rulememb_pos);
 	}
 
+	// rotate atom animation
 	if (latestatom != null) {
 	    var latestatom_pos_abs = get_pos(latestatom);
 	    var grid_pos = get_pos(grid);
