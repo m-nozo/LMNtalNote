@@ -52,10 +52,10 @@ function sort_links (links, atom_angle) {
 
 var Membrane = function () {
     this.parent = null;
-    this.process = new Process();
+    this.root = new Process();
 };
 Membrane.prototype.encode = function () {
-    return `{ ${this.process.encode()} }`;
+    return `{ ${this.root.encode()} }`;
 };
 
 

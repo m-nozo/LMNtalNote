@@ -2,9 +2,9 @@ window.onload = function () {
     var svgns = "http://www.w3.org/2000/svg";
     var xlinkns = "http://www.w3.org/1999/xlink";
 
-    textbox = document.getElementById("textbox");
+    var textbox = document.getElementById("textbox");
 
-    svg = document.getElementById("svg");
+    var svg = document.getElementById("svg");
     var bg = svg.children.bg;
     var guide = svg.children.guide;
 
@@ -32,7 +32,8 @@ window.onload = function () {
     var rulememb_pos = {x:0, y:0};
     var latestatom = null;
     var link_from_atom = null;
-    rename_atom = null;
+    var rename_atom = null;
+    var latest_rule = null;
 
     var link_index = 0;
 
@@ -211,6 +212,7 @@ window.onload = function () {
 		x : guide_pos.x,
 		y : guide_pos.y
 	    };
+	    latestmemb.lmntal_process = new Membrane();
 	    parent_process.push(latestmemb.lmntal_process);
 
 	    break;
@@ -228,6 +230,9 @@ window.onload = function () {
 		x : 1000000,
 		y : guide_pos.y
 	    };
+	    latestrule = create_new_rule(parent_process);
+	    latestmemb.lmntal_process = {root:latestrule.lmntal_process.head};
+	    rulememb.lmntal_process = {root:latestrule.lmntal_process.body};
 	    break;
 	}
     }
@@ -244,7 +249,7 @@ window.onload = function () {
 	    create_new_process_context(parent_process, "p",guide_pos.x, guide_pos.y);
 	    break;
 	case "rule" :
-    	    set_pos_abs(create_new_rule(process_root), guide_pos.x, rulememb_pos.y);
+    	    set_pos_abs(latestrule, guide_pos.x, rulememb_pos.y);
 	    break;
 	}
     }
@@ -381,20 +386,19 @@ window.onload = function () {
 	newMemb.addEventListener("mouseup", mouseup_on_memb, false);
 	layer3.appendChild(newMemb);
 
-	console.log("create membrane.", newMemb);
-
-	newMemb.lmntal_process = new Membrane();
+	console.log("create membrane.");
+	console.dir(newMemb);
 
 	return newMemb;
     }
 
     function mousedown_on_memb (e) {
 	mouse.scroll = true;
-	mousedown_on_process(this.lmntal_process.process);
+	mousedown_on_process(this.lmntal_process.root);
     }
 
     function mouseup_on_memb (e) {
-	mouseup_on_process(this.lmntal_process.process);
+	mouseup_on_process(this.lmntal_process.root);
     }
 
     //====================================
@@ -409,8 +413,6 @@ window.onload = function () {
 	console.log("create rule.");
 
 	newRule.lmntal_process = new Rule();
-	newRule.lmntal_process.head.push(latestmemb.lmntal_process);
-	newRule.lmntal_process.body.push(rulememb.lmntal_process);
 	parent_process.push(newRule.lmntal_process);
 
 	return newRule;
