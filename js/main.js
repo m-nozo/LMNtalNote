@@ -223,12 +223,14 @@ window.onload = function () {
 	case "rule" :
 	    mouse.scroll = false;
 	    latestmemb = create_new_memb(parent_process);
+	    latestmemb.setAttribute("fill","green");
     	    set_pos_abs(latestmemb, -1000000, guide_pos.y);
 	    latestmemb_pos = {
 		x : -1000000,
 		y : guide_pos.y
 	    };
 	    rulememb = create_new_memb(parent_process);
+	    rulememb.setAttribute("fill","green");
     	    set_pos_abs(rulememb, 1000000, guide_pos.y);
 	    rulememb_pos = {
 		x : 1000000,
