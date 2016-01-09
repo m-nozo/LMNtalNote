@@ -441,14 +441,14 @@ window.onload = function () {
 
 	// create rulemembs
 	head_rulememb = create_new_memb(parent_process);
-	head_rulememb.setAttribute("fill","green");
+	head_rulememb.setAttribute("fill","red");
     	set_pos_abs(head_rulememb, x, y);
 	rulememb_pos = {
 	    x : x,
 	    y : y
 	};
 	body_rulememb = create_new_memb(parent_process);
-	body_rulememb.setAttribute("fill","green");
+	body_rulememb.setAttribute("fill","red");
     	set_pos_abs(body_rulememb, x, y);
 	rulememb_pos = {
 	    x : x,
