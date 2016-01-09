@@ -322,6 +322,7 @@ window.onload = function () {
 	}
 
 	if (!mouse.move) {
+	    textbox.focus();
 	    rename_atom = this;
 	    textbox.value = this.lmntal_process.name;
 	}
@@ -503,6 +504,7 @@ window.onload = function () {
     }
 
     function mouseup_on_rulearrow (e) {
+	textbox.focus();
 	rename_guard = this;
 	textbox.value = this.lmntal_process.guard;
     }
