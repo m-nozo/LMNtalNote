@@ -23,7 +23,7 @@ window.onload = function () {
     var tool_rule = svg.children.tool_rule;
     var tool_process_context = svg.children.tool_process_context;
 
-    var mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, scroll:false, mode:"atom"};
+    mouse = {x:0, y:0, px:0, py:0, down:false, moved:false, scroll:false, mode:"atom"};
 
     // link
     var latestlink = null;
@@ -51,8 +51,11 @@ window.onload = function () {
     process_root = new Process();
 
     // select mouse mode
-    tool_atom.addEventListener("click", function (e) {
-	mouse.mode = "atom";
+    tool_atom.addEventListener("mouseup", function (e) {
+	switch (e.button) {
+	case 0: mouse.mode = "atom"; break;
+	case 2: mouse.mode = "remove"; break;
+	}
 	console.log("mouse mode:" + mouse.mode);
     }, false);
 
@@ -314,6 +317,7 @@ window.onload = function () {
     function mouseup_on_atom (e) {
 	latestlink = null;
 
+	// create link
 	if(link_from_atom != null) {
 	    if(link_from_atom.linkname == undefined)
 		conect_atom(link_from_atom, this, "L"+link_index++);
@@ -321,10 +325,18 @@ window.onload = function () {
 		conect_atom(link_from_atom, this, link_from_atom.linkname);
 	}
 
+	// select this atom into rename_atom
 	if (!mouse.move) {
 	    textbox.focus();
 	    rename_atom = this;
 	    textbox.value = this.lmntal_process.name;
+	}
+
+	// remove this atom
+	if (mouse.mode == "remove") {
+	    remove_process(this.lmntal_process);
+	    this.text.parentNode.removeChild(this.text);
+	    this.parentNode.removeChild(this);
 	}
     }
 
