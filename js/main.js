@@ -257,10 +257,6 @@ window.onload = function () {
 	case "process_context" :
 	    create_new_process_context(parent_process, "p",guide_pos.x, guide_pos.y);
 	    break;
-	case "rule" :
-    	    if(latestrule != null && rulememb_pos != null)
-		set_pos_abs(latestrule, rulememb_pos.x, rulememb_pos.y);
-	    break;
 	}
     }
 
@@ -427,12 +423,13 @@ window.onload = function () {
     // Rule
     //====================================
     function create_new_rule (parent_process, x, y) {
+	// create rule_arrow
 	var newRule = document.createElementNS(svgns, "use");
 	newRule.setAttributeNS(xlinkns, "href", "#rule_arrow");
 	newRule.setAttribute("fill", "white");
+    	set_pos_abs(newRule, x, y);
 
-	console.log("create rule.");
-
+	// create lmntal ruleobject
 	newRule.lmntal_process = new Rule();
 	parent_process.push(newRule.lmntal_process);
 
@@ -468,6 +465,8 @@ window.onload = function () {
 	body_rulememb.addEventListener("mouseup", mouseup_on_rulememb, false);
 
     	layer3.appendChild(newRule);
+
+	console.log("create rule.");
 
 	return newRule;
     }
