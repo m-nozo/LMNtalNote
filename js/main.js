@@ -43,6 +43,7 @@ window.onload = function () {
 
     // rule
     var latestrule = null;
+    var rename_guard = null;
 
     var link_index = 0;
     var text_margin = 22;
@@ -361,6 +362,10 @@ window.onload = function () {
 	    rename_atom.text.textContent = this.value;
 	    rename_atom.lmntal_process.name = this.value;
 	}
+	if (rename_guard != null) {
+	    rename_guard.text.textContent = this.value;
+	    rename_guard.lmntal_process.guard = this.value;
+	}
     }, false);
 
     //====================================
@@ -423,11 +428,12 @@ window.onload = function () {
     // Rule
     //====================================
     function create_new_rule (parent_process, x, y) {
-	// create rule_arrow
+	// create rulearrow
 	var newRule = document.createElementNS(svgns, "use");
 	newRule.setAttributeNS(xlinkns, "href", "#rule_arrow");
 	newRule.setAttribute("fill", "white");
     	set_pos_abs(newRule, x, y);
+	newRule.addEventListener("mouseup", mouseup_on_rulearrow, false);
 
 	// create lmntal ruleobject
 	newRule.lmntal_process = new Rule();
@@ -466,6 +472,10 @@ window.onload = function () {
 
     	layer3.appendChild(newRule);
 
+	// set guard text
+	newRule.text = create_new_text("");
+	set_pos_abs(newRule.text, x, y-text_margin);
+
 	console.log("create rule.");
 
 	return newRule;
@@ -490,6 +500,11 @@ window.onload = function () {
 
 	    latestlink = null;
 	}
+    }
+
+    function mouseup_on_rulearrow (e) {
+	rename_guard = this;
+	textbox.value = this.lmntal_process.guard;
     }
 
     //====================================
