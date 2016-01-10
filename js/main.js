@@ -330,6 +330,7 @@ window.onload = function () {
 	    textbox.focus();
 	    rename_atom = this;
 	    textbox.value = this.lmntal_process.name;
+	    rename_guard = null;
 	}
 
 	// remove this atom
@@ -519,6 +520,7 @@ window.onload = function () {
 	textbox.focus();
 	rename_guard = this;
 	textbox.value = this.lmntal_process.guard;
+	rename_atom = null;
     }
 
     //====================================
