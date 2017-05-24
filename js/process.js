@@ -26,18 +26,36 @@ var Atom = function (name) {
     this.parent = null;
     this.name  = name;
     this.links = [];
+    this.angle = 0;
 };
 Atom.prototype.encode = function () {
-    return `${this.name}(${this.links.toString()})`;
+    return `${this.name}(${sort_links(this.links, this.angle).toString()})`;
 };
 
+
+var Link = function (name, angle) {
+    this.name = name;
+    this.angle = angle;
+};
+Link.prototype.toString = function () {
+    return this.name;
+};
+function sort_links (links, atom_angle) {
+    return links.sort(function (a,b) {
+	var a_angle = a.angle - atom_angle;
+	var b_angle = b.angle - atom_angle;
+	a_angle = a_angle >= 0 ? a_angle : 360+a_angle;
+	b_angle = b_angle >= 0 ? b_angle : 360+b_angle;
+	return a_angle > b_angle ? 1 : -1;
+    });
+};
 
 var Membrane = function () {
     this.parent = null;
-    this.process = new Process();
+    this.root = new Process();
 };
 Membrane.prototype.encode = function () {
-    return `{ ${this.process.encode()} }`;
+    return `{ ${this.root.encode()} }`;
 };
 
 
@@ -48,16 +66,18 @@ var Rule = function () {
     this.guard = '';
 };
 Rule.prototype.encode = function () {
-    return `( ${this.head.encode()} :- ${this.guard.encode()} | ${this.body.encode()} )`;
+    return `(${this.head.encode()}:-${this.guard}|${this.body.encode()})`;
 };
 
 
-var ProcessContexts = function () {
+var ProcessContexts = function (name) {
+    this.parent = null;
     this.name = name;
     this.links = [];
+    this.angle = 0;
 };
 ProcessContexts.prototype.encode = function () {
-    return `$${this.name}[${this.links.toString()}]`;
+    return `$${this.name}[${sort_links(this.links, this.angle).toString()}]`;
 };
 
 
@@ -72,24 +92,14 @@ Process.prototype.push = function (process) {
 /*
   pop Process
 */
-Atom.prototype.pop = function () {
-    this.parent.right = new Empty();
-    return this;
-};
-
-Membrane.prototype.pop = function () {
-    this.parent.right = new Empty();
-    return this;
-};
-
-Rule.prototype.pop = function () {
-    this.parent.right = new Empty();
-    return this;
+function remove_process (process) {
+    process.parent.right = new Empty();
+    return process;
 };
 
 /*
   add link
 */
-Atom.prototype.addlink = function (target) {
-    this.links.push(new Link(this, target.pop()));
-}
+function add_link (process, link) {
+    process.links.push(link);
+};
